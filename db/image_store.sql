@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict NaxOzVwHgpe84JcZCdKbC968bIPEfQC18u7PB9gzUjY8pRzDzNJ7zz9vaUUbhlu
+\restrict jA867P995owmUkfdbthqzEupIo835Wv8mESlQMIq0aGtMNxV4RPonezR3Ls5XPd
 
 -- Dumped from database version 14.20 (Debian 14.20-1.pgdg13+1)
 -- Dumped by pg_dump version 18.2
 
--- Started on 2026-04-08 03:22:24
+-- Started on 2026-04-08 03:40:24
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -34,14 +34,16 @@ CREATE TABLE public.image_store (
     id bigint NOT NULL,
     file text NOT NULL,
     uploading_user character varying(50) NOT NULL,
-    format character varying(4) NOT NULL
+    format character varying(4) NOT NULL,
+    attribution text NOT NULL,
+    source_link text
 );
 
 
 ALTER TABLE public.image_store OWNER TO postgres;
 
 --
--- TOC entry 3408 (class 0 OID 0)
+-- TOC entry 3415 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN image_store.file; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -50,7 +52,7 @@ COMMENT ON COLUMN public.image_store.file IS 'filename';
 
 
 --
--- TOC entry 3409 (class 0 OID 0)
+-- TOC entry 3416 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN image_store.uploading_user; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -59,12 +61,21 @@ COMMENT ON COLUMN public.image_store.uploading_user IS 'track user who uploaded 
 
 
 --
--- TOC entry 3410 (class 0 OID 0)
+-- TOC entry 3417 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN image_store.format; Type: COMMENT; Schema: public; Owner: postgres
 --
 
 COMMENT ON COLUMN public.image_store.format IS 'image format';
+
+
+--
+-- TOC entry 3418 (class 0 OID 0)
+-- Dependencies: 212
+-- Name: COLUMN image_store.source_link; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.image_store.source_link IS 'only applicable if it''s a bug-dex image, the source should be linked for licensing restrictions and compliance checks';
 
 
 --
@@ -83,7 +94,7 @@ CREATE SEQUENCE public."imageStore_id_seq"
 ALTER SEQUENCE public."imageStore_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 3411 (class 0 OID 0)
+-- TOC entry 3419 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: imageStore_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -92,7 +103,7 @@ ALTER SEQUENCE public."imageStore_id_seq" OWNED BY public.image_store.id;
 
 
 --
--- TOC entry 3260 (class 2604 OID 16413)
+-- TOC entry 3267 (class 2604 OID 16413)
 -- Name: image_store id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -100,7 +111,7 @@ ALTER TABLE ONLY public.image_store ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 3262 (class 2606 OID 16418)
+-- TOC entry 3269 (class 2606 OID 16418)
 -- Name: image_store image_store_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -109,7 +120,7 @@ ALTER TABLE ONLY public.image_store
 
 
 --
--- TOC entry 3263 (class 2606 OID 16432)
+-- TOC entry 3270 (class 2606 OID 16432)
 -- Name: image_store uploading_user_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -117,11 +128,11 @@ ALTER TABLE ONLY public.image_store
     ADD CONSTRAINT uploading_user_fk FOREIGN KEY (uploading_user) REFERENCES public.users(username) ON UPDATE CASCADE NOT VALID;
 
 
--- Completed on 2026-04-08 03:22:25
+-- Completed on 2026-04-08 03:40:24
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict NaxOzVwHgpe84JcZCdKbC968bIPEfQC18u7PB9gzUjY8pRzDzNJ7zz9vaUUbhlu
+\unrestrict jA867P995owmUkfdbthqzEupIo835Wv8mESlQMIq0aGtMNxV4RPonezR3Ls5XPd
 
