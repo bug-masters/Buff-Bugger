@@ -1,34 +1,31 @@
-const express = require('express');
-const pgp = require('pg-promise')();
-require('dotenv').config();
+async function loadTemplate(path) {
+  const res = await fetch(path);
+  return await res.text();
+}
 
-const app = express();
+async function init() {
+  const basePath = window.location.pathname.includes('/map-wip/') ? '../' : '/';
+  const navbarSource = await loadTemplate(basePath + 'handlebar/navbar.hbs');
+  const mainSource = await loadTemplate(basePath + 'handlebar/main.hbs');
 
-// DB config (IMPORTANT: host is "db", not localhost)
-const db = pgp({
-  host: 'db',
-  port: 5432,
-  database: process.env.POSTGRES_DB,
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD
-});
+  const navbarTemplate = Handlebars.compile(navbarSource);
+  const mainTemplate = Handlebars.compile(mainSource);
 
-// test route
-app.get('/', async (req, res) => {
-  try {
-    const result = await db.any('SELECT * FROM users;');
-    res.send(`
-      <h1>Buff Bugger Running</h1>
-      <p>Users in DB: ${result.length}</p>
-    `);
-  } catch (err) {
-    console.error(err);
-    res.send('Database error');
-  }
-});
+  const navbarHTML = navbarTemplate({
+    links: [
+      { name: "Home", url: "/" },
+      { name: "about", url: "#" },
+      { name: "Leaderboards", url: "#" },
+      { name: "Login/out(fill later)", url: "#" },
+      { name: "map WIP", url: "/map-wip/mapWip.html" }
+    ]
+  });
 
-// start server
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+  const finalHTML = mainTemplate({
+    navbar: navbarHTML
+  });
+
+  document.getElementById('navhtml').innerHTML = finalHTML;
+}
+
+init();
