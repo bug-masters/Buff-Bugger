@@ -4,8 +4,9 @@ async function loadTemplate(path) {
 }
 
 async function init() {
-  const navbarSource = await loadTemplate('/handlebar/navbar.hbs');
-  const mainSource = await loadTemplate('/handlebar/main.hbs');
+  const basePath = window.location.pathname.includes('/map-wip/') ? '../' : '/';
+  const navbarSource = await loadTemplate(basePath + 'handlebar/navbar.hbs');
+  const mainSource = await loadTemplate(basePath + 'handlebar/main.hbs');
 
   const navbarTemplate = Handlebars.compile(navbarSource);
   const mainTemplate = Handlebars.compile(mainSource);
@@ -15,7 +16,8 @@ async function init() {
       { name: "Home", url: "/" },
       { name: "about", url: "#" },
       { name: "Leaderboards", url: "#" },
-      { name: "Login/out(fill later)", url: "#" }
+      { name: "Login/out(fill later)", url: "#" },
+      { name: "map WIP", url: "/map-wip/mapWip.html" }
     ]
   });
 
@@ -23,7 +25,7 @@ async function init() {
     navbar: navbarHTML
   });
 
-  document.getElementById('index').innerHTML = finalHTML;
+  document.getElementById('navhtml').innerHTML = finalHTML;
 }
 
 init();

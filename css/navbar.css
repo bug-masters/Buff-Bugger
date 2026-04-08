@@ -1,0 +1,29 @@
+.navbar-nav {
+    margin: 0;
+    padding: 0;
+    line-height:48px;
+
+    list-style-type:none;
+}
+
+.nav-item {
+    padding: 0 1em;
+    display: inline-block;
+}
+
+.navlink {
+    text-decoration: none;
+    color: white;
+    font-family:arial;
+
+    display:block;
+    padding: 10px 20px; 
+}
+
+#nav-container {
+    background-color:rgb(72, 133, 72);
+}
+
+#nav-container .navbar-nav .navlink:hover {
+    background-color: rgb(106, 179, 106);
+}
