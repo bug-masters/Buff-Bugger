@@ -70,40 +70,116 @@ app.use(
   })
 );
 
-async function loadTemplate(path) {
-  const res = await fetch(path);
-  return await res.text();
-}
+app.get('/', (req, res) => {
+  res.redirect('/login');
+});
 
-async function init() {
-  const basePath = window.location.pathname.includes('/map-wip/') ? '../' : '/';
-  const navbarSource = await loadTemplate(basePath + 'handlebar/navbar.hbs');
-  const mainSource = await loadTemplate(basePath + 'handlebar/main.hbs');
-
-  const navbarTemplate = Handlebars.compile(navbarSource);
-  const mainTemplate = Handlebars.compile(mainSource);
-
-  const navbarHTML = navbarTemplate({
-    links: [
-      { name: "Home", url: "/" },
-      { name: "about", url: "#" },
-      { name: "Leaderboards", url: "#" },
-      { name: "Login/out(fill later)", url: "#" },
-      { name: "map WIP", url: "/map-wip/mapWip.html" }
-    ]
-  });
-
-  const finalHTML = mainTemplate({
-    navbar: navbarHTML
-  });
-
-  document.getElementById('navhtml').innerHTML = finalHTML;
-}
+// Register
+app.get('/register', (req, res) => {
+  res.render('pages/register');
+});
 
 app.post('/register', async (req, res) => {
-  const { username, password } = req.body;
+  //hash the password using bcrypt library
   const hash = await bcrypt.hash(req.body.password, 10);
-  
-  await user.save();
-  res.status(201).send('User registered');
-}
+   await db.any(`INSERT INTO users (username, password) VALUES ($1, $2);`, [req.body.username, hash]);
+  res.redirect('/login');
+});
+
+app.get('/login', (req, res) => {
+  res.render('pages/login');
+});
+
+app.post('/login', async (req, res) => {
+let user = null;
+  try {
+    user = await db.one(`SELECT * FROM users WHERE username = $1`, [req.body.username]);
+  } catch (error) {
+    console.error(error);
+    res.render('pages/register', { message: 'No user under that name found. Register' });
+    return;
+  }
+  if(user === null){
+    res.render('pages/register', { message: 'No user under that name found. Register' });
+    return;
+  }
+  // check if password from request matches with password in DB
+  const match = await bcrypt.compare(req.body.password, user.password);
+  if (match) {
+    //save user details in session like in lab 7
+    req.session.user = user;
+    req.session.save();
+    res.redirect('/discover');
+  } else {
+    res.render('pages/login', { message: 'Invalid username or password. Please try again.' });
+  }
+});
+
+// Authentication Middleware.
+const auth = (req, res, next) => {
+  if (!req.session.user) {
+    // Default to login page.
+    return res.redirect('/login');
+  }
+  next();
+};
+
+// Authentication Required
+// app.use(auth); Removing this line of code
+
+//Instead we will use auth in our routes that require the user to be authenticated
+
+//For eg: /discover route will look as follows:
+
+app.get('/discover', auth, (req, res) => {
+  const keyword = req.query.keyword || 'any artist'; // or use a fixed artist string
+  const size = parseInt(req.query.size, 10) || 10; // default number of results
+
+axios({
+  url: `https://app.ticketmaster.com/discovery/v2/events.json`,
+  method: 'GET',
+  dataType: 'json',
+  headers: {
+    'Accept-Encoding': 'application/json',
+  },
+  params: {
+    apikey: process.env.API_KEY,
+    keyword: 'casiopea', //you can choose any artist/event here
+    size: 10 // you can choose the number of events you would like to return
+  },
+})
+  .then(results => {
+    console.log(results.data); // the results will be displayed on the terminal if the docker containers are running // Send some parameters
+  })
+  .catch(error => {
+      console.error(error);
+      res.status(500).send('Error fetching events');
+  });
+
+
+    const cards = new Array(10).fill({
+        title: "The Quick Brown Fox Jumped Over The Lazy Dog",
+        text: "The Quick Brown Fox Jumped Over The Lazy Dog",
+        img: "https://wiki.teamfortress.com/w/images/a/a2/Teleporter_tfc.png"
+    });
+    res.render('pages/discover', { cards });
+});
+
+app.get('/logout', auth, (req, res) => {
+
+    req.session.destroy((err) => {
+        if (err) {
+            return res.render('pages/logout', {
+                message: "Error logging out"
+            });
+        }
+
+        res.render('pages/logout', {
+            message: "Logged out Successfully"
+        });
+    });
+
+});
+
+app.listen(3000);
+console.log('Server is listening on port 3000');
