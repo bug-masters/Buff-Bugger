@@ -1,10 +1,15 @@
-#map {
-    height: 100%;
+
+
+gmp-map {
+    height: 50vh;
+    width: 50vh
 }
 
 html,
 body {
-
+    display:flex;
+    justify-content: center;
+    align-items:center;
     height: 100%;
     margin: 0;
     padding: 0;
