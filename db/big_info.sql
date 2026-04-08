@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict vRJRKOKPwIF7Ej3feQbQvQAoJ9CRjW1lSYh94lF9MtM0UPbLWxRKF8oxu2chDXG
+\restrict 9QZqaR77QV4Hp3wQS4KcS3CdhtUX9bCyy99g7DOjVQl3XhPaHzpdFcXIV4t1W7S
 
 -- Dumped from database version 14.20 (Debian 14.20-1.pgdg13+1)
 -- Dumped by pg_dump version 18.2
 
--- Started on 2026-04-08 03:09:00
+-- Started on 2026-04-08 03:21:48
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -31,18 +31,27 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.bug_info (
-    bugid bigint NOT NULL,
-    commonname text NOT NULL,
+    bug_id bigint NOT NULL,
+    common_name text NOT NULL,
     genus text NOT NULL,
     flying boolean DEFAULT false NOT NULL,
-    limbcount smallint DEFAULT 0 NOT NULL,
+    limb_count smallint DEFAULT 0 NOT NULL,
     color text NOT NULL,
-    photoattribution character varying NOT NULL,
-    "photoId" bigint DEFAULT 0 NOT NULL
+    photo_attribution character varying NOT NULL,
+    photo_id bigint DEFAULT 0 NOT NULL
 );
 
 
 ALTER TABLE public.bug_info OWNER TO postgres;
+
+--
+-- TOC entry 3412 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: TABLE bug_info; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON TABLE public.bug_info IS 'bug-dex table';
+
 
 --
 -- TOC entry 210 (class 1259 OID 16392)
@@ -60,20 +69,20 @@ CREATE SEQUENCE public.buginfo_bugid_seq
 ALTER SEQUENCE public.buginfo_bugid_seq OWNER TO postgres;
 
 --
--- TOC entry 3412 (class 0 OID 0)
+-- TOC entry 3413 (class 0 OID 0)
 -- Dependencies: 210
 -- Name: buginfo_bugid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.buginfo_bugid_seq OWNED BY public.bug_info.bugid;
+ALTER SEQUENCE public.buginfo_bugid_seq OWNED BY public.bug_info.bug_id;
 
 
 --
 -- TOC entry 3260 (class 2604 OID 16396)
--- Name: bug_info bugid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: bug_info bug_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.bug_info ALTER COLUMN bugid SET DEFAULT nextval('public.buginfo_bugid_seq'::regclass);
+ALTER TABLE ONLY public.bug_info ALTER COLUMN bug_id SET DEFAULT nextval('public.buginfo_bugid_seq'::regclass);
 
 
 --
@@ -82,7 +91,7 @@ ALTER TABLE ONLY public.bug_info ALTER COLUMN bugid SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.bug_info
-    ADD CONSTRAINT buginfo_pk PRIMARY KEY (bugid);
+    ADD CONSTRAINT buginfo_pk PRIMARY KEY (bug_id);
 
 
 --
@@ -90,7 +99,7 @@ ALTER TABLE ONLY public.bug_info
 -- Name: fki_photoid_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_photoid_fk ON public.bug_info USING btree ("photoId");
+CREATE INDEX fki_photoid_fk ON public.bug_info USING btree (photo_id);
 
 
 --
@@ -99,14 +108,14 @@ CREATE INDEX fki_photoid_fk ON public.bug_info USING btree ("photoId");
 --
 
 ALTER TABLE ONLY public.bug_info
-    ADD CONSTRAINT photo_id_fk FOREIGN KEY ("photoId") REFERENCES public.image_store(id) ON UPDATE CASCADE ON DELETE SET DEFAULT NOT VALID;
+    ADD CONSTRAINT photo_id_fk FOREIGN KEY (photo_id) REFERENCES public.image_store(id) ON UPDATE CASCADE ON DELETE SET DEFAULT NOT VALID;
 
 
--- Completed on 2026-04-08 03:09:00
+-- Completed on 2026-04-08 03:21:48
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict vRJRKOKPwIF7Ej3feQbQvQAoJ9CRjW1lSYh94lF9MtM0UPbLWxRKF8oxu2chDXG
+\unrestrict 9QZqaR77QV4Hp3wQS4KcS3CdhtUX9bCyy99g7DOjVQl3XhPaHzpdFcXIV4t1W7S
 
