@@ -56,14 +56,6 @@ ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pk PRIMARY KEY (username);
 
 
---
--- TOC entry 3270 (class 2606 OID 16391)
--- Name: users users_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_unique UNIQUE (password);
-
 
 -- Completed on 2026-04-08 03:41:43
 

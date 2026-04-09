@@ -70,8 +70,8 @@ app.use(
   })
 );
 
-app.get('/', async (req, res) => {
-  console.log("working");
+app.get('/', (req, res) => {
+  res.render('pages/home');
 });
 
 // Register
