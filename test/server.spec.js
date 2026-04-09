@@ -31,7 +31,7 @@ describe('Server!', () => {
 
 // ********************************************************************************
 
-describe('Testing Add User API', () => {
+describe('-- Positive Registration API Test --', () => {
   it('positive : /register', done => {
     chai
       .request(server)
@@ -39,6 +39,20 @@ describe('Testing Add User API', () => {
       .send({username: 'John Doe', email: 'example@example.com'})
       .end((err, res) => {
         expect(res).to.have.status(200);
+        expect(res.body.message).to.equals('Success');
+        done();
+      });
+  });
+});
+
+describe('-- Negative Registration API Test --', () => {
+  it('negative : /register', done => {
+    chai
+      .request(server)
+      .post('/register')
+      .send({username: 'John Doe', email: 'pretendemail'}) //invalid email
+      .end((err, res) => {
+        expect(res).to.have.status(400);
         done();
       });
   });
