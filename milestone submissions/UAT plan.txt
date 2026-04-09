@@ -1,0 +1,32 @@
+    1. User can create a bug post
+        ? A user can not submit a post until the following details are given/ allowed to be collected
+            i. Location is shared
+            ii. User is logged in to a valid account
+            iii. The following input provided
+                1. A photo of the bug
+                2. A short description
+        ? Information collected from the submission will be stored in the “post” table in the “bug_db”
+        ? The test will be executed in the cloud off a users device
+        ? On success the submission page will redirect to the main page displaying the post on the map with the collected details
+        ? On fail the submission page will display a message to the user informing them of invalid details
+
+    2. User can login to their account
+        ? A user can not login to their account until completing all mandatory fields:
+            i. Username
+            ii. Password
+        ? Information from the forum will be checked against the information stored in the “user” table in the “bug_db”
+        ? The test would be executed in cloud
+        ? On success the login page will redirect to the users profile page
+        ? On fail the login page will display a message informing the user of invalid credentials
+          
+    3. User can register an account
+        ? A user can not register an account until completing all mandatory fields
+            i. Username
+            ii. Password
+            iii. Confirm Password
+            iv. Email (in a valid email format)
+        ? Information from the forum is stored in the “user” table in the “bug_db”
+        ? The test would be executed in cloud
+        ? On success the register page will redirect to the login page
+        ? On fail the register page will display a massage informing the user of invalid inputs
+
