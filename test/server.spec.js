@@ -36,7 +36,7 @@ describe('-- Positive Registration API Test --', () => {
     chai
       .request(server)
       .post('/register')
-      .send({username: 'John Doe', email: 'example@example.com'})
+      .send({username: 'John Doe', email: 'example@example.com', password: 'password123'}) //valid email and password
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.message).to.equals('Success');
@@ -50,7 +50,7 @@ describe('-- Negative Registration API Test --', () => {
     chai
       .request(server)
       .post('/register')
-      .send({username: 'John Doe', email: 'pretendemail'}) //invalid email
+      .send({username: 'John Doe', email: 'pretendemail', password: 'password123'}) //invalid email
       .end((err, res) => {
         expect(res).to.have.status(400);
         done();

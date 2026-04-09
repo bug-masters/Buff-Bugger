@@ -87,11 +87,24 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
+  //make sure email is valid format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!req.body.email || !emailRegex.test(req.body.email)) {
+    return res.status(400).send("Invalid email format");
+  }
+
   //hash the password using bcrypt library
-  const hash = await bcrypt.hash(req.body.password, 10);
-  //await db.any(`INSERT INTO users (username, password) VALUES ($1, $2);`, [req.body.username, hash]);
-  res.status(200);
-  return;
+  let hash = null;
+  try{
+    hash = await bcrypt.hash(req.body.password, 10);
+  }
+  catch(error){
+    console.error(error);
+    return res.status(400).send("Error hashing password Mismatched password");
+  }
+  await db.any(`INSERT INTO users (username, password) VALUES ($1, $2);`, [req.body.username, hash]);
+  
+  return res.status(200).json({message: 'Success'});
 });
 
 app.get('/login', (req, res) => {
