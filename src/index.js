@@ -74,6 +74,13 @@ app.get('/', async (req, res) => {
   console.log("working");
 });
 
+app.get('/welcome', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Welcome!',
+  });
+});
+
 // Register
 app.get('/register', (req, res) => {
   res.render('pages/register');
@@ -82,8 +89,9 @@ app.get('/register', (req, res) => {
 app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
   const hash = await bcrypt.hash(req.body.password, 10);
-   await db.any(`INSERT INTO users (username, password) VALUES ($1, $2);`, [req.body.username, hash]);
-  res.redirect('/login');
+  //await db.any(`INSERT INTO users (username, password) VALUES ($1, $2);`, [req.body.username, hash]);
+  res.status(200);
+  return;
 });
 
 app.get('/login', (req, res) => {
@@ -115,70 +123,5 @@ let user = null;
   }
 });
 
-// Authentication Middleware.
-const auth = (req, res, next) => {
-  if (!req.session.user) {
-    // Default to login page.
-    return res.redirect('/login');
-  }
-  next();
-};
-
-// Authentication Required
-// app.use(auth); Removing this line of code
-
-//Instead we will use auth in our routes that require the user to be authenticated
-
-//For eg: /discover route will look as follows:
-
-app.get('/discover', auth, (req, res) => {
-  const keyword = req.query.keyword || 'any artist'; // or use a fixed artist string
-  const size = parseInt(req.query.size, 10) || 10; // default number of results
-
-axios({
-  url: `https://app.ticketmaster.com/discovery/v2/events.json`,
-  method: 'GET',
-  dataType: 'json',
-  headers: {
-    'Accept-Encoding': 'application/json',
-  },
-  params: {
-    apikey: process.env.API_KEY,
-    keyword: 'casiopea', //you can choose any artist/event here
-    size: 10 // you can choose the number of events you would like to return
-  },
-})
-  .then(results => {
-    console.log(results.data); // the results will be displayed on the terminal if the docker containers are running // Send some parameters
-  })
-  .catch(error => {
-      console.error(error);
-      res.status(500).send('Error fetching events');
-  });
-
-    const cards = new Array(10).fill({
-        title: "The Quick Brown Fox Jumped Over The Lazy Dog",
-        text: "The Quick Brown Fox Jumped Over The Lazy Dog",
-        img: "https://wiki.teamfortress.com/w/images/a/a2/Teleporter_tfc.png"
-    });
-    res.render('pages/discover', { cards });
-});
-
-app.get('/logout', auth, (req, res) => {
-
-    req.session.destroy((err) => {
-        if (err) {
-            return res.render('pages/logout', {
-                message: "Error logging out"
-            });
-        }
-
-        res.render('pages/logout', {
-            message: "Logged out Successfully"
-        });
-    });
-
-});
-
-app.listen(3000);
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
