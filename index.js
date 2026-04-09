@@ -156,7 +156,6 @@ axios({
       res.status(500).send('Error fetching events');
   });
 
-
     const cards = new Array(10).fill({
         title: "The Quick Brown Fox Jumped Over The Lazy Dog",
         text: "The Quick Brown Fox Jumped Over The Lazy Dog",
