@@ -70,8 +70,8 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => {
-  res.redirect('/login');
+app.get('/', async (req, res) => {
+  console.log("working");
 });
 
 // Register
