@@ -1,0 +1,57 @@
+<p>SUMBIT A BUG</p>
+
+<!-- bug_id bigint NOT NULL,
+    common_name text NOT NULL,
+    genus text NOT NULL,
+    flying boolean DEFAULT false NOT NULL,
+    limb_count smallint DEFAULT 0 NOT NULL,
+    color text NOT NULL,
+    photo_id bigint DEFAULT 0 NOT NULL*/
+-->
+
+<div class="container p-4">
+<form id="submit" action = "/submit" method = "POST">
+
+
+    <div class="mb-3"> 
+        <label for="Common_Name" class="form-label"> Bug Common Name </label>
+        <input
+         type="text" 
+         class="form-control" 
+         id="Bug Common Name" 
+         aria-describedby="Bug Common Name" 
+         placeholder= "Bug Common Name" 
+         name="common_name" >
+    </div>
+
+    <div class="mb-3"> 
+        <label for="genus" class="form-label"> genus </label>
+        <input
+         type="text" 
+         class="form-control" 
+         id="Genus" 
+         aria-describedby="Genus" 
+         placeholder= "genus" 
+         name="genus" >
+    </div>
+
+
+     <div class="mb-3"> 
+        <label for="color" class="form-label"> color </label>
+        <input
+         type="text" 
+         class="form-control" 
+         id="Color" 
+         aria-describedby="Color" 
+         placeholder= "Color" 
+         name="color" >
+    </div>
+
+
+
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+  </div>
