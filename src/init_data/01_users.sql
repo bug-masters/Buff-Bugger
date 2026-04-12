@@ -30,8 +30,8 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.users (
-    username character varying(50) NOT NULL,
-    password character varying(60) NOT NULL
+    username VARCHAR(50) PRIMARY KEY,
+    password VARCHAR(60) NOT NULL
 );
 
 
