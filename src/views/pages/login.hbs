@@ -1,32 +1,36 @@
-
 <div class="container p-4">
-<form id="register" action = "/login" method = "POST">
-
-<h1>Log in</h1>
-    <div class="mb-3"> 
-        <label for="username" class="form-label"> username </label>
-        <input
-         type="text" 
-         class="form-control" 
-         id="username" 
-         aria-describedby="username" 
-         placeholder= "username" 
-         name="username" >
-    </div>
-
-    <div class="mb-3"> 
-        <label for="password" class="password"> Password </label>
-        <input
-         type="text" 
-         class="form-control" 
-         id="password" 
-         aria-describedby="password" 
-         placeholder= "password" 
-         name="password" >
-    </div>
-
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-  </div>
+    <h1>Login</h1>
+    <form id="login" action = "/login" method = "POST">
+        <div class="mb-3"> 
+            <label for="username" class="form-label"> username </label>
+            <input
+            type="text" 
+            class="form-control" 
+            id="username" 
+            aria-describedby="username" 
+            placeholder= "username" 
+            name="username" >
+        </div>
+        <div class="mb-3"> 
+            <label for="password" class="password"> Password </label>
+            <input
+            type="password" 
+            class="form-control" 
+            id="password" 
+            aria-describedby="password" 
+            placeholder= "password" 
+            name="password" ></input>
+        </div>
+        {{#if message}}
+        <div class="alert alert-{{#if error}}danger{{else}}success{{/if}}" role="alert">
+            {{ message }}
+            {{#if errBtnMsgRgstr}}
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='/register'">
+                    Register
+                </button>  
+            {{/if}}
+        </div>
+        {{/if}}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>

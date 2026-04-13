@@ -143,7 +143,6 @@ app.post('/submit', async (req, res) => {
 app.get('/register', (req, res) => {
   console.log("SUBMIT ROUTE HIT");
   res.render('pages/register', { title: 'Register'});
-  
 });
 
   // Register - POST route
@@ -171,59 +170,60 @@ app.post('/register', async (req, res) => {
 
 //LOGIN STUFF
 
-
-app.get('/login', (req, res) => {
-  res.render('pages/login', {
-    title: 'Login',
-    message: null // optional placeholder for messages
-  });
+app.get('/login', async(req, res) => {
+  res.render('pages/login', {title: 'Login'});
 });
 
 
-app.post('/login', async (req, res) => {
+app.post('/login', async(req, res) => {
+  //Check db for user
   try {
     const { username, password } = req.body;
-
-    // 1️ Find user in the database by username
-    const user = await db.oneOrNone(
-      'SELECT * FROM users WHERE username = $1',
-      [username]
-    );
-
-    if (!user) {
-      // 2️ User not found → redirect to register page
-      return res.redirect('/register');
-    }
-
-    // 3️ Compare submitted password with hashed password in DB
+    const user = await db.one('SELECT * FROM users WHERE username = $1 LIMIT 1', [username]);
+  } catch (e) { 
+    res.status(401);
+    console.error('Error during login:', e);
+    return res.render('pages/login', {
+      title: 'Login',
+      message: 'User not found. If you do not have an account, please register here: ',
+      errBtnMsgRgstr: "", //treated as conditional in login.hbs to show register button
+      error: "error" //error field for formatting without giving away any sensitive information
+    });
+  }
+  //hash given password and compare with saved hash
+  try{
     const match = await bcrypt.compare(password, user.password);
-
-    if (!match) {
-      // 4️ Password incorrect → re-render login page with message
-      return res.render('pages/login', {
-        title: 'Login',
-        message: 'Incorrect username or password.'
-      });
-    }
-
-    // 5️ Password correct → save user in session
+  } catch (e) {
+    console.error('Error comparing passwords:', e);
+    res.status(500);
+    return res.render('pages/login', {
+      title: 'Login',
+      message: 'Wrong password. Please try again.',
+      error: "error"
+    });
+  }
+  if (!match) { // user not found
+    res.status(401);
+    return res.render('pages/login', {
+      title: 'Login',
+      message: 'Incorrect username or password.',
+      error: "error"
+    });
+  }
+  //rejoice! the user is found
+  try{
     req.session.user = {
       id: user.id,
       username: user.username
     };
-
+  } catch (e) {
+    console.error('Error setting session:', e);
+    res.status(500); 
     req.session.save(() => {
       res.redirect('/home');
     });
-
-  } catch (error) {
-    console.error('Login error:', error);
-    // fallback → redirect back to login page
-    res.render('pages/login', {
-      title: 'Login',
-      message: 'An error occurred. Please try again.'
-    });
   }
+  return;
 });
 
 
