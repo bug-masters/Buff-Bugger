@@ -1,4 +1,6 @@
 const express = require('express');
+const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
+const bcrypt = require('bcryptjs'); //  To hash passwords
 const handlebars = require('express-handlebars');
 const path = require('path');
 
@@ -40,6 +42,20 @@ db.connect()
     console.log('ERROR:', error.message || error);
   });
 
+  //authentication
+
+  app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false
+}));
+
+  function isAuthenticated(req, res, next) {
+  if (req.session.user && req.session.user) {
+    return next(); // user is logged in, proceed
+  }
+  res.redirect('/login'); // user not logged in, redirect
+}
 
 
 //render home page
@@ -156,8 +172,7 @@ app.post('/login', async (req, res) => {
     };
 
     req.session.save(() => {
-      // 6️ Redirect to /discover after session is saved
-      res.redirect('/discover');
+      res.redirect('/home');
     });
 
   } catch (error) {
