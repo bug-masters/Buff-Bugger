@@ -2,14 +2,15 @@
     <h1>Login</h1>
     <form id="login" action = "/login" method = "POST">
         <div class="mb-3"> 
-            <label for="username" class="form-label"> username </label>
+            <label for="username" class="form-label"> Username </label>
             <input
             type="text" 
             class="form-control" 
             id="username" 
             aria-describedby="username" 
             placeholder= "username" 
-            name="username" >
+            name="username" 
+            required></input>
         </div>
         <div class="mb-3"> 
             <label for="password" class="password"> Password </label>
@@ -19,7 +20,8 @@
             id="password" 
             aria-describedby="password" 
             placeholder= "password" 
-            name="password" ></input>
+            name="password" 
+            required></input>
         </div>
         {{#if message}}
         <div class="alert alert-{{#if error}}danger{{else}}success{{/if}}" role="alert">

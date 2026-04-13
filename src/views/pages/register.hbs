@@ -1,32 +1,58 @@
-
 <div class="container p-4">
-<form id="register" action = "/register" method = "POST">
-
-<h1>Register</h1>
-    <div class="mb-3"> 
-        <label for="username" class="form-label"> username </label>
-        <input
-         type="text" 
-         class="form-control" 
-         id="username" 
-         aria-describedby="username" 
-         placeholder= "username" 
-         name="username" >
-    </div>
-
-    <div class="mb-3"> 
-        <label for="password" class="password"> Password </label>
-        <input
-         type="password" 
-         class="form-control" 
-         id="password" 
-         aria-describedby="password" 
-         placeholder= "password" 
-         name="password" >
-    </div>
-
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-  </div>
+    <h1>Register</h1>
+    <form id="register" action = "/register" method = "POST">
+        <div class="mb-3"> 
+            <label for="username" class="form-label"> Username </label>
+            <input
+            type="text" 
+            class="form-control" 
+            id="username" 
+            aria-describedby="username" 
+            placeholder= "username" 
+            name="username" 
+            value="{{username}}"
+            required></input>
+        </div>
+        <div class="mb-3"> 
+            <label for="email" class="form-label"> Email </label>
+            <input
+            type="email" 
+            class="form-control" 
+            id="email" 
+            aria-describedby="email" 
+            placeholder= "email" 
+            name="email"
+            value="{{email}}"
+            required></input>
+        </div>
+        <div class="mb-3"> 
+            <label for="password" class="password"> Password </label>
+            <input
+            type="text" 
+            class="form-control" 
+            id="password" 
+            aria-describedby="password" 
+            placeholder= "password" 
+            name="password" 
+            value="{{password}}"
+            required></input>
+        </div>
+        <div class="mb-3"> 
+            <label for="confirmPassword" class="password"> Confirm Password </label>
+            <input
+            type="password" 
+            class="form-control" 
+            id="confirmPassword" 
+            aria-describedby="password" 
+            placeholder= "confirm password" 
+            name="confirmPassword" 
+            required></input>
+        </div>
+        {{#if message}}
+        <div class="alert alert-{{#if error}}danger{{else}}success{{/if}}" role="alert">
+            {{ message }}
+        </div>
+        {{/if}}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>

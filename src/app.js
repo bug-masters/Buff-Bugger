@@ -3,6 +3,7 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const handlebars = require('express-handlebars');
 const path = require('path');
+const { hash } = require('crypto');
 
 const app = express();
 
@@ -146,53 +147,171 @@ app.get('/register', (req, res) => {
 });
 
   // Register - POST route
-app.post('/register', async (req, res) => {
-  try {
-    // 1️ Extract username and password from form
-    const { username, password } = req.body;
-
-    // 2️ Hash the password with bcrypt
-    const hash = await bcrypt.hash(password, 10);
-
-    // 3️ Insert username and hashed password into 'users' table
-    const query = 'INSERT INTO users(username, password) VALUES($1, $2)';
-    await db.none(query, [username, hash]);
-
-    // 4️ Redirect to login page if successful
-    res.redirect('/login');
-  } catch (error) {
-    console.error('Error registering user:', error);
-
-    // 5️ If insert fails, redirect back to register page
-    res.redirect('/register');
+app.post('/register', async(req, res) => {
+  // email is valid format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!req.body.email || !emailRegex.test(req.body.email)) {
+    return res.status(400).render('pages/register', {
+      title: 'Register',
+      message: 'Invalid email',
+      error: "error",
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    });
   }
+  // password not strong enough
+  const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  if (!req.body.password || !strongPasswordRegex.test(req.body.password)) {
+    return res.status(400).render('pages/register', {
+      title: 'Register', 
+      message: 'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.',
+      error: "error",
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    });
+  }
+  // passwords do not match
+  if(req.body.password !== req.body.confirmPassword){
+    return res.status(400).render('pages/register', {
+      title: 'Register', 
+      message: 'Passwords do not match.', 
+      error: "error",
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    });
+  }
+  // email already in use
+  try{
+    const emailCheck = await db.one('SELECT COUNT(*) FROM users WHERE email = $1', [req.body.email]);
+    if (parseInt(emailCheck.count) > 0) {
+      return res.status(400).render('pages/register', {
+        title: 'Register', 
+        message: 'Email already in use.', 
+        error: "error",
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+      });
+    }
+  } catch (e) {
+    console.error('Error checking email:', e);
+    return res.status(500).render('pages/register', {
+      title: 'Register',
+      message: 'An error occurred. Please try again.',
+      error: "error",
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    });
+  }
+  // username already in use
+  try{
+    const usernameCheck = await db.one('SELECT COUNT(*) FROM users WHERE username = $1', [req.body.username]);
+    if (parseInt(usernameCheck.count) > 0) {
+      return res.status(400).render('pages/register', {
+        title: 'Register', 
+        message: 'Username already in use.', 
+        error: "error",
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+      });
+    }
+  } catch (e) {
+    console.error('Error checking username:', e);
+    return res.status(500).render('pages/register', {
+      title: 'Register',
+      message: 'An error occurred. Please try again.',
+      error: "error",
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    });
+  }
+  // username too short
+  if(req.body.username.length < 3){
+    return res.status(400).render('pages/register', {
+      title: 'Register',
+      message: 'Username must be at least 3 characters long.',
+      error: "error",
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    });
+  }
+  let hash = null;
+  try{
+    hash = await bcrypt.hash(req.body.password, 10);
+  }
+  catch(e){
+    console.error(e);
+    return res.status(500).render('pages/register', {
+      title: 'Register',
+      message: 'An error occurred. Please try again.',  
+      error: "error",
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    });
+  }
+  await db.none(`INSERT INTO users (username, password, email) VALUES ($1, $2, $3);`, [req.body.username, hash, req.body.email]);
+  //session variables because we don't confirm accounts through email... yet‽
+  
+  req.session.regenerate((err) => {
+      if (err) {
+          console.error('Session regenerate error:', err);
+          return res.render('pages/login', {
+              title: 'Login',
+              message: 'An error occurred. Please try again.',
+              error: "error"
+          });
+      }
+      req.session.user = {
+          username: req.body.username
+      };
+      req.session.save((err) => {
+          if (err) {
+              console.error('Session save error:', err);
+              return res.render('pages/login', {
+                  title: 'Login',
+                  message: 'An error occurred. Please try again.',
+                  error: "error"
+              });
+          }
+          res.redirect('/home');
+      });
+  })
+  return res.status(200).render('pages/register', {
+    title: 'Register',
+    message: 'Registration successful! You are now logged in.',
+  });
 });
-
-//LOGIN STUFF
 
 app.get('/login', async(req, res) => {
   res.render('pages/login', {title: 'Login'});
 });
 
-
 app.post('/login', async(req, res) => {
   //Check db for user
+  let user = null;
   try {
-    const { username, password } = req.body;
-    const user = await db.one('SELECT * FROM users WHERE username = $1 LIMIT 1', [username]);
+    user = await db.one('SELECT * FROM users WHERE username = $1 LIMIT 1', [req.body.username]);
   } catch (e) { 
     res.status(401);
-    console.error('Error during login:', e);
     return res.render('pages/login', {
       title: 'Login',
       message: 'User not found. If you do not have an account, please register here: ',
-      errBtnMsgRgstr: "", //treated as conditional in login.hbs to show register button
+      errBtnMsgRgstr: ".", //treated as conditional in login.hbs to show register button
       error: "error" //error field for formatting without giving away any sensitive information
     });
   }
   //hash given password and compare with saved hash
+  let match = null
   try{
-    const match = await bcrypt.compare(password, user.password);
+    match = await bcrypt.compare(req.body.password, user.password);
   } catch (e) {
     console.error('Error comparing passwords:', e);
     res.status(500);
@@ -202,7 +321,8 @@ app.post('/login', async(req, res) => {
       error: "error"
     });
   }
-  if (!match) { // user not found
+  // user not found (just in case)
+  if (!match || match === null) {
     res.status(401);
     return res.render('pages/login', {
       title: 'Login',
@@ -211,21 +331,32 @@ app.post('/login', async(req, res) => {
     });
   }
   //rejoice! the user is found
-  try{
-    req.session.user = {
-      id: user.id,
-      username: user.username
-    };
-  } catch (e) {
-    console.error('Error setting session:', e);
-    res.status(500); 
-    req.session.save(() => {
-      res.redirect('/home');
-    });
-  }
+  req.session.regenerate((err) => {
+      if (err) {
+          console.error('Session regenerate error:', err);
+          return res.render('pages/login', {
+              title: 'Login',
+              message: 'An error occurred. Please try again.',
+              error: "error"
+          });
+      }
+      req.session.user = {
+          username: user.username
+      };
+      req.session.save((err) => {
+          if (err) {
+              console.error('Session save error:', err);
+              return res.render('pages/login', {
+                  title: 'Login',
+                  message: 'An error occurred. Please try again.',
+                  error: "error"
+              });
+          }
+          res.redirect('/home');
+      });
+  });
   return;
 });
-
 
 //logout
 app.get('/logout', (req, res) => {
