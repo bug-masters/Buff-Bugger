@@ -70,6 +70,32 @@ app.get('/home', (req, res) => {
   
 });
 
+app.get('/api/bugs', async (req, res) => {
+  try {
+    const bugs = await db.any('SELECT * FROM bug_info');
+    res.json(bugs);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching bugs');
+  }
+});
+
+//bugidex
+
+app.get('/bug-i-dex', async (req, res) => {
+  try {
+    const bugs = await db.any('SELECT * FROM bug_info ORDER BY bug_id ASC');
+
+    res.render('pages/bug-i-dex', {
+      title: 'bug-i-dex',
+      bugs
+    });
+
+  } catch (error) {
+    console.error('Error loading bugs:', error);
+    res.redirect('/home');
+  }
+});
 //SUBMISSION
 
 
@@ -78,28 +104,34 @@ app.use(express.urlencoded({ extended: true }));
 
 //render submit page
 app.get('/submit',  isAuthenticated,(req, res) => {
+
+  try {
   console.log("SUBMIT ROUTE HIT");
   res.render('pages/submit', { title: 'Submit'});
-  
+  } catch (error) {
+    console.error('you must register first', error);
+
+    res.redirect('/register')
+  }
 });
 
 // extract from page:
 app.post('/submit', async (req, res) => {
   try {
     // 1️ Extract information from the form
-    const {common_name, genus, color} = req.body;
+    const {common_name, genus, color, latitude, longitude} = req.body;
 
     //2 Put it into the DB
-    const query = 'INSERT INTO bug_info(common_name, genus, color) VALUES($1, $2, $3)';
+    const query = 'INSERT INTO bug_info(common_name, genus, color, latitude, longitude) VALUES($1, $2, $3, $4, $5)';
 
-   await db.none(query, [common_name, genus, color]);
+   await db.none(query, [common_name, genus, color, latitude, longitude]);
     //go to map when done
     res.redirect('/map');
   } catch (error){
-        console.error('Error inputing bug:', unregistered);
+        console.error('Error inputing bug:', error);
 
     // 5️ If insert fails, redirect back to register page
-    res.redirect('/register');
+    res.redirect('/submit');
   }
 });
 

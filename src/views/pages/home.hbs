@@ -183,10 +183,11 @@
       <aside class="friends-sidebar">
         <h3>Friends List</h3>
         <ul class="friends-list">
-          <li>Ava — recently checked the map</li>
-          <li>Jordan — uploaded a bug sighting</li>
-          <li>Miguel — viewing Boulder activity</li>
-          <li>Sophia — active today</li>
+          {{#if isLoggedIn}}
+          <li>no friends implementation yet</li>
+          {{else}}
+          <li> log in or register to save and view friends</li>
+          {{/if}}
         </ul>
       </aside>
 
@@ -200,20 +201,29 @@
 
           <div class="welcome-actions">
             <a class="primary-btn" href="/map">Open Map</a>
+
+            {{#unless isLoggedIn}}
             <a class="secondary-btn" href="/login">Log In</a>
             <a class="secondary-btn" href="/register">Register</a>
+            {{/unless}}
           </div>
         </div>
 
         <div class="map-card">
           <h2>Map Preview</h2>
-          <div class="map-placeholder">
-            <div>
-              <strong>Map preview placeholder</strong>
-              <br>
-              The live map can be inserted here once map integration is complete.
-            </div>
-          </div>
+                 <div class="map-page">
+                    <div id="map" style="height: 500px; width: 100%;"></div>
+
+                    <script src="/js/map.js"></script>
+
+                    <script
+                      src="https://maps.googleapis.com/maps/api/js?key= AIzaSyDG-SM3IvZSMGuJ61kZSexN-uXKUXngP_I
+                      &callback=initMap"
+                      async
+                      defer
+                    ></script>
+                  </div>
+              
         </div>
 
         <div class="feature-grid">

@@ -36,7 +36,9 @@ CREATE TABLE public.bug_info (
     flying boolean DEFAULT false NOT NULL,
     limb_count smallint DEFAULT 0 NOT NULL,
     color text NOT NULL,
-    photo_id bigint NULL --removed DEFAULT 0 temporarily for testing purposes
+    photo_id bigint NULL, --removed DEFAULT 0 temporarily for testing purposes
+    latitude NUMERIC(8,6),
+    longitude NUMERIC(9,6)
 );
 
 

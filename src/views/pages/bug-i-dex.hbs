@@ -1,0 +1,29 @@
+ <div class="row">
+
+    {{#each bugs}}
+      <div class="col-md-4 mb-4">
+
+        <div class="card h-100 shadow-sm">
+
+          <div class="card-body">
+            <h5 class="card-title">{{common_name}}</h5>
+
+            <h6 class="card-subtitle mb-2 text-muted">
+              {{genus}}
+            </h6>
+
+            <p class="card-text">
+              <strong>Color:</strong> {{color}} <br>
+              <strong>Lat:</strong> {{latitude}} <br>
+              <strong>Lng:</strong> {{longitude}}
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+    {{/each}}
+
+  </div>
+</div>
