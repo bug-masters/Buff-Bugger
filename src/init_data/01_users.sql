@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict cuC7aS0msNDGKxn8JdqP7pZNFEUcgds24M4lXlLqkUyKkUKbSX7Q87yyo8REYsZ
+\restrict cv1JqXEZi01gJvbu4GEQxyXhviTA8aJUoE2WDBOYsMASbJU6rljqpvRF54dca1m
 
--- Dumped from database version 14.20 (Debian 14.20-1.pgdg13+1)
+-- Dumped from database version 14.22 (Debian 14.22-1.pgdg13+1)
 -- Dumped by pg_dump version 18.2
 
--- Started on 2026-04-08 03:41:43
+-- Started on 2026-04-13 02:27:08
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -20,47 +20,43 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-SET default_tablespace = '';
-
 SET default_table_access_method = heap;
 
 --
 -- TOC entry 209 (class 1259 OID 16385)
--- Name: users; Type: TABLE; Schema: public; Owner: postgres
+-- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.users (
     username character varying(50) NOT NULL,
-    password character varying(60) NOT NULL
+    password character varying(60) NOT NULL,
+    email character varying(254) NOT NULL
 );
 
 
-ALTER TABLE public.users OWNER TO postgres;
-
 --
--- TOC entry 3415 (class 0 OID 0)
--- Dependencies: 209
--- Name: TABLE users; Type: COMMENT; Schema: public; Owner: postgres
+-- TOC entry 3268 (class 2606 OID 16442)
+-- Name: users user_email_unique; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.users IS 'should ONLY hold login info, everything else put somewhere else';
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT user_email_unique UNIQUE (email);
 
 
 --
--- TOC entry 3268 (class 2606 OID 16389)
--- Name: users users_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 3270 (class 2606 OID 16389)
+-- Name: users users_pk; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pk PRIMARY KEY (username);
 
 
-
--- Completed on 2026-04-08 03:41:43
+-- Completed on 2026-04-13 02:27:08
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict cuC7aS0msNDGKxn8JdqP7pZNFEUcgds24M4lXlLqkUyKkUKbSX7Q87yyo8REYsZ
+\unrestrict cv1JqXEZi01gJvbu4GEQxyXhviTA8aJUoE2WDBOYsMASbJU6rljqpvRF54dca1m
 
