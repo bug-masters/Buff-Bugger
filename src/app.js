@@ -63,9 +63,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', async (req, res) => {
+  res.status(200);
+  res.redirect('/home');
+});
 
 //render home page
 app.get('/home', (req, res) => {
+  res.status(200);
   res.render('pages/home', { title: 'Home'});
   
 });
@@ -118,18 +123,16 @@ app.get('/submit',  isAuthenticated,(req, res) => {
 // extract from page:
 app.post('/submit', async (req, res) => {
   try {
-    // 1️ Extract information from the form
-    const {common_name, genus, color, latitude, longitude} = req.body;
+  // 1️ Extract information from the form
+  const {common_name, genus, color, latitude, longitude} = req.body;
+  //2 Put it into the DB
+  const query = 'INSERT INTO bug_info(common_name, genus, color, latitude, longitude) VALUES($1, $2, $3, $4, $5)';
 
-    //2 Put it into the DB
-    const query = 'INSERT INTO bug_info(common_name, genus, color, latitude, longitude) VALUES($1, $2, $3, $4, $5)';
-
-   await db.none(query, [common_name, genus, color, latitude, longitude]);
-    //go to map when done
-    res.redirect('/map');
+  await db.none(query, [common_name, genus, color, latitude, longitude]);
+  //go to map when done
+  res.redirect('/map');
   } catch (error){
-        console.error('Error inputing bug:', error);
-
+    console.error('Error inputing bug:', error);
     // 5️ If insert fails, redirect back to register page
     res.redirect('/submit');
   }
