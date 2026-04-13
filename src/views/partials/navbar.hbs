@@ -13,13 +13,26 @@
         <a class="navlink" href="/map">Map</a>
       </li>
 
+
+{{#if isLoggedIn}}
+      <li class="nav-item">
+        <a class="navlink" href="/logout"> Logout </a>
+      </li>
+
        <li class="nav-item">
         <a class="navlink" href="/submit">Submit</a>
       </li>
 
+{{else}}
        <li class="nav-item">
         <a class="navlink" href="/register">Register</a>
       </li>
+
+      <li class="nav-item">
+        <a class="navlink" href="/login"> Login</a>
+      </li>
+
+{{/if}}
   </ul>
 </header>
 </div>

@@ -57,6 +57,12 @@ db.connect()
   res.redirect('/login'); // user not logged in, redirect
 }
 
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  res.locals.isLoggedIn = !!req.session.user;
+  next();
+});
+
 
 //render home page
 app.get('/home', (req, res) => {
