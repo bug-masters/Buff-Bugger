@@ -405,6 +405,19 @@ app.get('/map', (req, res) => {
   res.render('pages/map');
 });
 
+app.post('/upload', function(req, res, next){
+  upload(req, res, function(err){
+    if(err){
+      console.error('Error uploading file:', err);
+      return res.status(400).render('pages/submit', {
+        title: 'Submit',
+        message: 'Error uploading file: ' + err,
+        error: "error"
+      });
+    }
+  });
+});
+
 //allows access to map.js
 app.use(express.static(path.join(__dirname, '../public')));
 
