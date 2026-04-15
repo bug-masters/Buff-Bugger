@@ -2,16 +2,17 @@
 -- PostgreSQL database dump
 --
 
-\restrict etWCWXwNRQ7VHJlcKjPwYl2G0ZHLvgC8ebYq2ckU5CXSb61dWHEahLiSYWrsi8w
+\restrict boS2xgh1UBCGnzjPpHTfnrD1TQSxc0ZOLJwrlffBXY26bkCXo5sCczhAYpNaepj
 
--- Dumped from database version 14.20 (Debian 14.20-1.pgdg13+1)
+-- Dumped from database version 14.22 (Debian 14.22-1.pgdg13+1)
 -- Dumped by pg_dump version 18.2
 
--- Started on 2026-04-08 03:40:07
+-- Started on 2026-04-15 17:18:40
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -25,7 +26,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 211 (class 1259 OID 16393)
+-- TOC entry 214 (class 1259 OID 16413)
 -- Name: bug_info; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -35,18 +36,15 @@ CREATE TABLE public.bug_info (
     genus text NOT NULL,
     flying boolean DEFAULT false NOT NULL,
     limb_count smallint DEFAULT 0 NOT NULL,
-    color text NOT NULL,
-    photo_id bigint NULL, --removed DEFAULT 0 temporarily for testing purposes
-    latitude NUMERIC(8,6),
-    longitude NUMERIC(9,6)
+    color text NOT NULL
 );
 
 
 ALTER TABLE public.bug_info OWNER TO postgres;
 
 --
--- TOC entry 3419 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3416 (class 0 OID 0)
+-- Dependencies: 214
 -- Name: TABLE bug_info; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -54,7 +52,7 @@ COMMENT ON TABLE public.bug_info IS 'bug-dex table';
 
 
 --
--- TOC entry 210 (class 1259 OID 16392)
+-- TOC entry 215 (class 1259 OID 16420)
 -- Name: buginfo_bugid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -69,8 +67,8 @@ CREATE SEQUENCE public.buginfo_bugid_seq
 ALTER SEQUENCE public.buginfo_bugid_seq OWNER TO postgres;
 
 --
--- TOC entry 3420 (class 0 OID 0)
--- Dependencies: 210
+-- TOC entry 3417 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: buginfo_bugid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -78,7 +76,7 @@ ALTER SEQUENCE public.buginfo_bugid_seq OWNED BY public.bug_info.bug_id;
 
 
 --
--- TOC entry 3267 (class 2604 OID 16396)
+-- TOC entry 3267 (class 2604 OID 16421)
 -- Name: bug_info bug_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -86,7 +84,7 @@ ALTER TABLE ONLY public.bug_info ALTER COLUMN bug_id SET DEFAULT nextval('public
 
 
 --
--- TOC entry 3272 (class 2606 OID 16402)
+-- TOC entry 3271 (class 2606 OID 16423)
 -- Name: bug_info buginfo_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -94,28 +92,11 @@ ALTER TABLE ONLY public.bug_info
     ADD CONSTRAINT buginfo_pk PRIMARY KEY (bug_id);
 
 
---
--- TOC entry 3273 (class 1259 OID 16424)
--- Name: fki_photoid_fk; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX fki_photoid_fk ON public.bug_info USING btree (photo_id);
-
-
---
--- TOC entry 3274 (class 2606 OID 16425)
--- Name: bug_info photo_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.bug_info
-    ADD CONSTRAINT photo_id_fk FOREIGN KEY (photo_id) REFERENCES public.image_store(id) ON UPDATE CASCADE ON DELETE SET DEFAULT NOT VALID;
-
-
--- Completed on 2026-04-08 03:40:08
+-- Completed on 2026-04-15 17:18:40
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict etWCWXwNRQ7VHJlcKjPwYl2G0ZHLvgC8ebYq2ckU5CXSb61dWHEahLiSYWrsi8w
+\unrestrict boS2xgh1UBCGnzjPpHTfnrD1TQSxc0ZOLJwrlffBXY26bkCXo5sCczhAYpNaepj
 
