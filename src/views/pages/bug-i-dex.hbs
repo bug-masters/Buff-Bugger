@@ -1,5 +1,11 @@
  <div class="row">
 
+{{#unless bugs.length}}
+<div class = col-md-4>
+  <p id= "nobugserror" class = "p-3 mb-3"> no bugs have been submitted at this time</p>
+  </div>
+{{/unless}}
+
     {{#each bugs}}
       <div class="col-md-4 mb-4">
 
