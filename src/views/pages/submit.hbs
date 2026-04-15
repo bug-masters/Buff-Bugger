@@ -47,6 +47,9 @@
          name="color" >
     </div>
 
+<button type="button" id="locationButton" class="btn btn-primary mb-3">
+  Share my location
+</button>
    
      <div class="mb-3"> 
         <label for="latitude" class="form-label"> latitude </label>
@@ -60,6 +63,7 @@
     </div>
 
 
+
      <div class="mb-3"> 
         <label for="longitude" class="form-label"> longitude </label>
         <input
@@ -70,9 +74,43 @@
          placeholder= "longitude" 
          name="longitude" >
     </div>
+{{!-- 
+ Check if geolocation is supported by the browser --}}
+
 
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
+
+<div id= "demo"></div>
   </div>
+
+  <script>
+
+document.addEventListener("DOMContentLoaded", () => {
+  const x = document.getElementById("demo");
+  const locationButton = document.getElementById("locationButton");
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+      x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+
+  function success(position) {
+    document.getElementById("latitude").value = position.coords.latitude;
+    document.getElementById("longitude").value = position.coords.longitude;
+  }
+
+  function error() {
+    alert("Sorry, no position available.");
+  }
+
+  locationButton.addEventListener("click", () => {
+    getLocation();
+  });
+});
+</script>
