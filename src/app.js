@@ -105,7 +105,7 @@ app.get('/api/bugs', async (req, res) => {
   try {
     const bugs = await db.any('SELECT * FROM bug_info');
     res.json(bugs);
-  } catch (err) {
+  } catch (err){
     console.error(err);
     res.status(500).send('Error fetching bugs');
   }
@@ -137,17 +137,15 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/submit',  isAuthenticated,(req, res) => {
 
   try {
-  console.log("SUBMIT ROUTE HIT");
-  res.render('pages/submit', { title: 'Submit'});
+    res.render('pages/submit', { title: 'Submit'});
   } catch (error) {
     console.error('you must register first', error);
-
     res.redirect('/register')
   }
 });
 
 // extract from page:
-app.post('/submit', async (req, res) => {
+app.post('/submit', upload, async (req, res) => {
   try {
   // 1️ Extract information from the form
   const {common_name, genus, color, latitude, longitude} = req.body;
@@ -162,6 +160,18 @@ app.post('/submit', async (req, res) => {
     // 5️ If insert fails, redirect back to register page
     res.redirect('/submit');
   }
+
+  upload(req, res, function(err){
+    if(err){
+      console.error('Error uploading file:', err);
+      return res.status(400).render('pages/submit', {
+        title: 'Submit',
+        message: 'Error uploading file: ' + err,
+        error: "error"
+      });
+    }
+  });
+
 });
 
 //register routes
