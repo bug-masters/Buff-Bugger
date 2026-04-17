@@ -111,6 +111,36 @@ app.get('/api/bugs', async (req, res) => {
   }
 });
 
+app.get('/leaderboard', async (req, res) => {
+  try {
+    const users = await db.any(`
+      SELECT u.username,
+             COUNT(utp.post_id) AS post_count,
+             RANK() OVER (ORDER BY COUNT(utp.post_id) DESC) AS rank
+      FROM users u
+      LEFT JOIN user_to_post utp ON utp.user_id = u.username
+      GROUP BY u.username
+      ORDER BY post_count DESC;
+    `);
+
+    res.render('pages/leaderboard', { users });
+
+  } catch (err) {
+    console.error("LEADERBOARD ERROR:", err);
+    res.status(500).send('Error loading leaderboard');
+  }
+});
+
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await db.any('SELECT * FROM users');
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching users');
+  }
+});
+
 //bugidex
 
 app.get('/bug-i-dex', async (req, res) => {
