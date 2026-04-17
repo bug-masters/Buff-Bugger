@@ -160,18 +160,6 @@ app.post('/submit', upload, async (req, res) => {
     // 5️ If insert fails, redirect back to register page
     res.redirect('/submit');
   }
-
-  upload(req, res, function(err){
-    if(err){
-      console.error('Error uploading file:', err);
-      return res.status(400).render('pages/submit', {
-        title: 'Submit',
-        message: 'Error uploading file: ' + err,
-        error: "error"
-      });
-    }
-  });
-
 });
 
 //register routes
