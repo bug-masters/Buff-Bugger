@@ -99,3 +99,25 @@ ALTER TABLE ONLY public.bug_info
 
 \unrestrict boS2xgh1UBCGnzjPpHTfnrD1TQSxc0ZOLJwrlffBXY26bkCXo5sCczhAYpNaepj
 
+INSERT INTO public.bug_info (common_name, genus, flying, limb_count, color) VALUES
+('Ant', 'Formica', false, 6, 'Black'),
+('Mosquito', 'Culex', true, 6, 'Gray'),
+('House Fly', 'Musca', true, 6, 'Black'),
+('Cockroach', 'Periplaneta', false, 6, 'Brown'),
+('Grasshopper', 'Melanoplus', true, 6, 'Green'),
+('Aphid', 'Aphis', false, 6, 'Green'),
+('Beetle', 'Coleoptera', true, 6, 'Brown'),
+('Stink Bug', 'Halyomorpha', true, 6, 'Brown'),
+('Yellowjacket', 'Vespula', true, 6, 'Yellow/Black'),
+('Wasp', 'Polistes', true, 6, 'Yellow/Black'),
+('Hornet', 'Vespa', true, 6, 'Brown/Yellow'),
+('Butterfly', 'Danaus', true, 6, 'Orange/Black'),
+('Moth', 'Noctuidae', true, 6, 'Brown'),
+('Caterpillar', 'Lepidoptera', false, 6, 'Green'),
+('Black Widow Spider', 'Latrodectus', false, 8, 'Black'),
+('Wolf Spider', 'Lycosidae', false, 8, 'Brown'),
+('Tick', 'Ixodes', false, 8, 'Brown'),
+('Earwig', 'Dermaptera', false, 6, 'Brown'),
+('Dragonfly', 'Anisoptera', true, 6, 'Blue/Green'),
+('Fire Ant', 'Solenopsis', false, 6, 'Red');
+
