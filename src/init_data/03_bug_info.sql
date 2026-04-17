@@ -121,3 +121,6 @@ INSERT INTO public.bug_info (common_name, genus, flying, limb_count, color) VALU
 ('Dragonfly', 'Anisoptera', true, 6, 'Blue/Green'),
 ('Fire Ant', 'Solenopsis', false, 6, 'Red');
 
+CREATE INDEX IF NOT EXISTS idx_bug_info_common_name ON public.bug_info (common_name);
+CREATE INDEX IF NOT EXISTS idx_bug_info_genus ON public.bug_info (genus);
+CREATE INDEX IF NOT EXISTS idx_bug_info_color ON public.bug_info (color); 
