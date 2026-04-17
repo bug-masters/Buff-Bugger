@@ -124,3 +124,15 @@ INSERT INTO public.bug_info (common_name, genus, flying, limb_count, color) VALU
 CREATE INDEX IF NOT EXISTS idx_bug_info_common_name ON public.bug_info (common_name);
 CREATE INDEX IF NOT EXISTS idx_bug_info_genus ON public.bug_info (genus);
 CREATE INDEX IF NOT EXISTS idx_bug_info_color ON public.bug_info (color); 
+
+ALTER TABLE ONLY public.bug_info
+    ADD CONSTRAINT bug_info_limb_count_nonnegative CHECK (limb_count >= 0);
+
+ALTER TABLE ONLY public.bug_info
+    ADD CONSTRAINT bug_info_common_name_not_blank CHECK (length(trim(common_name)) > 0);
+
+ALTER TABLE ONLY public.bug_info
+    ADD CONSTRAINT bug_info_genus_not_blank CHECK (length(trim(genus)) > 0);
+
+ALTER TABLE ONLY public.bug_info
+    ADD CONSTRAINT bug_info_color_not_blank CHECK (length(trim(color)) > 0);
