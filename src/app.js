@@ -200,10 +200,17 @@ app.post('/submit', upload, async (req, res) => {
     const bugId = bug.bug_id;
 
     // 2 Insert into posts using POINT
-    await db.none(
+       const post = await db.one(
       `INSERT INTO posts (coords, bug_id, comments)
-       VALUES (POINT($1, $2), $3, $4)`,
-      [longitude, latitude, bugId, comments] // ⚠️ order matters: (x=lng, y=lat)
+      VALUES (POINT($1, $2), $3, $4)
+      RETURNING id`,
+      [longitude, latitude, bugId, comments]// ⚠️ order matters: (x=lng, y=lat)
+    );
+
+    await db.none(
+      `INSERT INTO user_to_post (user_id, post_id)
+       VALUES ($1, $2)`,
+      [req.session.user.username, post.id] // username is correct for your schema
     );
 
     res.redirect('/map');
