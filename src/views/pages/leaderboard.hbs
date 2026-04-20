@@ -1,3 +1,10 @@
+
+{{#unless users.length}}
+<div class = col-md-4>
+  <p id= "nouserserror" class = "p-3 mb-3"> no users are registered at this time</p>
+  </div>
+{{/unless}}
+
 {{#each users}}
   <div class="col-md-4 mb-4 m-3">
     <div class="card h-100 shadow-sm" style="width: 75rem;">
