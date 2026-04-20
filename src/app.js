@@ -103,9 +103,19 @@ app.get('/home', (req, res) => {
 
 app.get('/api/bugs', async (req, res) => {
   try {
-    const bugs = await db.any('SELECT * FROM bug_info');
+    const bugs = await db.any(`
+      SELECT 
+        b.common_name,
+        b.genus,
+        b.color,
+        p.coords[0] AS longitude,
+        p.coords[1] AS latitude
+      FROM posts p
+      JOIN bug_info b ON p.bug_id = b.bug_id
+    `);
+
     res.json(bugs);
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send('Error fetching bugs');
   }
@@ -177,17 +187,29 @@ app.get('/submit',  isAuthenticated,(req, res) => {
 // extract from page:
 app.post('/submit', upload, async (req, res) => {
   try {
-  // 1️ Extract information from the form
-  const {common_name, genus, color, latitude, longitude} = req.body;
-  //2 Put it into the DB
-  const query = 'INSERT INTO bug_info(common_name, genus, color, latitude, longitude) VALUES($1, $2, $3, $4, $5)';
+    const { common_name, genus, color, latitude, longitude, comments } = req.body;
 
-  await db.none(query, [common_name, genus, color, latitude, longitude]);
-  //go to map when done
-  res.redirect('/map');
-  } catch (error){
-    console.error('Error inputing bug:', error);
-    // 5️ If insert fails, redirect back to register page
+    // 1️ Insert into bug_info and return bug_id
+    const bug = await db.one(
+      `INSERT INTO bug_info (common_name, genus, color)
+       VALUES ($1, $2, $3)
+       RETURNING bug_id`,
+      [common_name, genus, color]
+    );
+
+    const bugId = bug.bug_id;
+
+    // 2 Insert into posts using POINT
+    await db.none(
+      `INSERT INTO posts (coords, bug_id, comments)
+       VALUES (POINT($1, $2), $3, $4)`,
+      [longitude, latitude, bugId, comments] // ⚠️ order matters: (x=lng, y=lat)
+    );
+
+    res.redirect('/map');
+
+  } catch (error) {
+    console.error('Error inputting bug:', error);
     res.redirect('/submit');
   }
 });
