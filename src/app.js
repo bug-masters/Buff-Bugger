@@ -476,7 +476,10 @@ app.post('/upload', function(req, res, next){
 });
 
 //allows access to map.js
-app.use(express.static(path.join(__dirname, '../public')));
+// app.use(express.static(path.join(__dirname, '../public')));
+
+app.use('/css', express.static(path.join(__dirname, 'resources/css')));
+app.use('/js', express.static(path.join(__dirname, 'resources/js')));
 
 app.listen(3000, () => {
   console.log('Server running at http://localhost:3000/home');

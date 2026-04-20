@@ -1,11 +1,21 @@
+<script>
+function waitForGoogleMaps(cb) {
+  const i = setInterval(() => {
+    if (window.google && window.google.maps) {
+      clearInterval(i);
+      cb();
+    }
+  }, 50);
+}
+
+waitForGoogleMaps(initMainMap);
+</script>
+
+
 <div class="map-page">
   <div id="map" style="height: 500px; width: 100%;"></div>
 
-  <script src="/js/map.js"></script>
+<script src="/js/mapRenderer.js"></script>
+<script src="/js/map.js"></script>
 
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDG-SM3IvZSMGuJ61kZSexN-uXKUXngP_I&callback=initMap"
-    async
-    defer
-  ></script>
 </div>

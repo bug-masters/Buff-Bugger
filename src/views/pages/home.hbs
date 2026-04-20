@@ -1,180 +1,18 @@
-<style>
-  .home-page {
-    min-height: 100vh;
-    background: linear-gradient(180deg, #edf7ed 0%, #dcebd8 100%);
-    font-family: Arial, sans-serif;
-    color: #1f2a1f;
-  }
 
-  .home-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 3rem;
-  }
-
-  .hero-wrapper {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 1.5rem;
-    align-items: start;
-  }
-
-  .friends-sidebar,
-  .welcome-card,
-  .map-card,
-  .feature-card {
-    background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
-  }
-
-  .friends-sidebar {
-    padding: 1rem;
-  }
-
-  .friends-sidebar h3 {
-    margin-top: 0;
-    margin-bottom: 0.85rem;
-    color: rgb(72, 133, 72);
-  }
-
-  .friends-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .friends-list li {
-    padding: 0.8rem 0.4rem;
-    border-bottom: 1px solid #e7eee5;
-  }
-
-  .friends-list li:last-child {
-    border-bottom: none;
-  }
-
-  .main-panel {
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  .welcome-card {
-    text-align: center;
-    padding: 2rem;
-  }
-
-  .welcome-card h1 {
-    margin: 0 0 0.75rem;
-    font-size: 2.4rem;
-    color: rgb(72, 133, 72);
-  }
-
-  .welcome-card p {
-    max-width: 700px;
-    margin: 0 auto 1.25rem;
-    line-height: 1.6;
-    font-size: 1.05rem;
-  }
-
-  .welcome-actions {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .welcome-actions a {
-    text-decoration: none;
-    padding: 0.9rem 1.2rem;
-    border-radius: 10px;
-    font-weight: bold;
-    transition: 0.2s ease;
-  }
-
-  .primary-btn {
-    background: rgb(72, 133, 72);
-    color: white;
-  }
-
-  .primary-btn:hover {
-    background: rgb(106, 179, 106);
-  }
-
-  .secondary-btn {
-    background: #f2f8f1;
-    color: rgb(72, 133, 72);
-    border: 1px solid rgb(72, 133, 72);
-  }
-
-  .secondary-btn:hover {
-    background: #e2efe0;
-  }
-
-  .map-card {
-    padding: 1.25rem;
-  }
-
-  .map-card h2 {
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    color: rgb(72, 133, 72);
-  }
-
-  .map-placeholder {
-    min-height: 360px;
-    border-radius: 14px;
-    border: 2px dashed rgb(72, 133, 72);
-    background:
-      linear-gradient(rgba(72, 133, 72, 0.07), rgba(72, 133, 72, 0.07)),
-      repeating-linear-gradient(
-        90deg,
-        #f7fbf7 0,
-        #f7fbf7 70px,
-        #eef5ed 70px,
-        #eef5ed 140px
-      );
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 1.5rem;
-    color: #355335;
-    line-height: 1.6;
-    font-size: 1.05rem;
-  }
-
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-
-  .feature-card {
-    padding: 1rem;
-  }
-
-  .feature-card h3 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    color: rgb(72, 133, 72);
-  }
-
-  .feature-card p {
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  @media (max-width: 900px) {
-    .hero-wrapper {
-      grid-template-columns: 1fr;
+<script>
+function waitForGoogleMaps(cb) {
+  const i = setInterval(() => {
+    if (window.google && window.google.maps) {
+      clearInterval(i);
+      cb();
     }
+  }, 50);
+}
 
-    .feature-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
+waitForGoogleMaps(initHomeMap);
+</script>
 
+<link rel="stylesheet" href="/css/home.css">
 <div class="home-page">
 
 
@@ -212,16 +50,13 @@
         <div class="map-card">
           <h2>Map Preview</h2>
                  <div class="map-page">
-                    <div id="map" style="height: 500px; width: 100%;"></div>
+                    <div id="homeMap" style="height: 500px; width: 100%;"></div>
 
-                    <script src="/js/map.js"></script>
 
-                    <script
-                      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDG-SM3IvZSMGuJ61kZSexN-uXKUXngP_I
-                      &callback=initMap"
-                      async
-                      defer
-                    ></script>
+                        <script src="/js/mapRenderer.js"></script>
+                        <script src="/js/home.js"></script>
+
+
                   </div>
               
         </div>
