@@ -419,7 +419,6 @@ app.post('/register', async(req, res) => {
       });
   })
 
-  res.redirect('/home');
 
 //the registration (according to professor) should redirect to a different page. I'm not sure how
 //to do the message implementation across a redirect, but this won't work
