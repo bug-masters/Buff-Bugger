@@ -418,10 +418,15 @@ app.post('/register', async(req, res) => {
           res.redirect('/home');
       });
   })
-  return res.status(200).render('pages/register', {
-    title: 'Register',
-    message: 'Registration successful! You are now logged in.',
-  });
+
+  res.redirect('/home');
+
+//the registration (according to professor) should redirect to a different page. I'm not sure how
+//to do the message implementation across a redirect, but this won't work
+  // return res.status(200).render('pages/home', {
+  //   title: 'Register',
+  //   message: 'Registration successful! You are now logged in.',
+  // });
 });
 
 app.get('/login', async(req, res) => {
