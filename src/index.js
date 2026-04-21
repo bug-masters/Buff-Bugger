@@ -167,8 +167,6 @@ app.get('/bug-i-dex', async (req, res) => {
     res.redirect('/home');
   }
 });
-//SUBMISSION
-
 
 //enable form parsing:
 app.use(express.urlencoded({ extended: true }));
@@ -200,7 +198,7 @@ app.post('/submit', upload, async (req, res) => {
     const bugId = bug.bug_id;
 
     // 2 Insert into posts using POINT
-       const post = await db.one(
+    const post = await db.one(
       `INSERT INTO posts (coords, bug_id, comments)
       VALUES (POINT($1, $2), $3, $4)
       RETURNING id`,
