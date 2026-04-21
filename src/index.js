@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs'); //  To hash passwords
 const handlebars = require('express-handlebars');
 const path = require('path');
 const { hash } = require('crypto');
+const axios = require('axios');
 
 const app = express();
 
@@ -184,6 +185,55 @@ app.get('/bug-i-dex', async (req, res) => {
 
 //enable form parsing:
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// chatbot proxy to Anthropic API
+app.post('/api/chat', async (req, res) => {
+  try {
+    const { messages } = req.body;
+    const username = req.session.user ? req.session.user.username : '';
+
+    const caughtBugs = await db.any(`
+      SELECT b.common_name, b.genus, b.color
+      FROM bug_info b
+      WHERE EXISTS (
+        SELECT 1 FROM posts p
+        JOIN user_to_post utp ON utp.post_id = p.id
+        WHERE p.bug_id = b.bug_id AND utp.user_id = $1
+      )
+    `, [username]);
+
+    const systemPrompt =
+      `You are a friendly entomology assistant inside the Buff-Bugger app. ` +
+      `The user has caught these species: ` +
+      (caughtBugs.length
+        ? caughtBugs.map(b => `${b.common_name} (${b.genus}, ${b.color})`).join('; ')
+        : 'none yet') +
+      `. Answer concisely.`;
+
+    const response = await axios.post(
+      'https://api.anthropic.com/v1/messages',
+      {
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 512,
+        system: systemPrompt,
+        messages,
+      },
+      {
+        headers: {
+          'x-api-key': process.env.ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+        },
+      }
+    );
+
+    res.json({ reply: response.data.content[0].text });
+  } catch (err) {
+    console.error('Chat error:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Chat error' });
+  }
+});
 
 //render submit page
 app.get('/submit', isAuthenticated, async (req, res) => {
