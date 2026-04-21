@@ -1,0 +1,47 @@
+.dex-title {
+    color: rgb(72, 133, 72);
+    margin: 1rem 0 1.5rem;
+    text-align: center;
+}
+
+.bug-card {
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: none;
+}
+
+.bug-card .bug-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.bug-card--caught {
+    background: #ffffff;
+}
+
+.bug-card--caught .card-title {
+    color: rgb(72, 133, 72);
+    margin-bottom: 0.25rem;
+}
+
+.bug-card--uncaught {
+    background: #e2e6e2;
+}
+
+.bug-card--uncaught .bug-image--placeholder {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    font-weight: bold;
+    color: #8a8a8a;
+    background: #cfd4cf;
+}
+
+.bug-card--uncaught .card-title {
+    color: #8a8a8a;
+}

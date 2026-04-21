@@ -35,7 +35,8 @@ CREATE TABLE public.bug_info (
     genus text NOT NULL,
     flying boolean DEFAULT false NOT NULL,
     limb_count smallint DEFAULT 0 NOT NULL,
-    color text NOT NULL
+    color text NOT NULL,
+    image_url text
 );
 
 
@@ -99,27 +100,27 @@ ALTER TABLE ONLY public.bug_info
 
 \unrestrict boS2xgh1UBCGnzjPpHTfnrD1TQSxc0ZOLJwrlffBXY26bkCXo5sCczhAYpNaepj
 
-INSERT INTO public.bug_info (common_name, genus, flying, limb_count, color) VALUES
-('Ant', 'Formica', false, 6, 'Black'),
-('Mosquito', 'Culex', true, 6, 'Gray'),
-('House Fly', 'Musca', true, 6, 'Black'),
-('Cockroach', 'Periplaneta', false, 6, 'Brown'),
-('Grasshopper', 'Melanoplus', true, 6, 'Green'),
-('Aphid', 'Aphis', false, 6, 'Green'),
-('Beetle', 'Coleoptera', true, 6, 'Brown'),
-('Stink Bug', 'Halyomorpha', true, 6, 'Brown'),
-('Yellowjacket', 'Vespula', true, 6, 'Yellow/Black'),
-('Wasp', 'Polistes', true, 6, 'Yellow/Black'),
-('Hornet', 'Vespa', true, 6, 'Brown/Yellow'),
-('Butterfly', 'Danaus', true, 6, 'Orange/Black'),
-('Moth', 'Noctuidae', true, 6, 'Brown'),
-('Caterpillar', 'Lepidoptera', false, 6, 'Green'),
-('Black Widow Spider', 'Latrodectus', false, 8, 'Black'),
-('Wolf Spider', 'Lycosidae', false, 8, 'Brown'),
-('Tick', 'Ixodes', false, 8, 'Brown'),
-('Earwig', 'Dermaptera', false, 6, 'Brown'),
-('Dragonfly', 'Anisoptera', true, 6, 'Blue/Green'),
-('Fire Ant', 'Solenopsis', false, 6, 'Red');
+INSERT INTO public.bug_info (common_name, genus, flying, limb_count, color, image_url) VALUES
+('Ant', 'Formica', false, 6, 'Black', 'https://loremflickr.com/400/300/ant?lock=1'),
+('Mosquito', 'Culex', true, 6, 'Gray', 'https://loremflickr.com/400/300/mosquito?lock=2'),
+('House Fly', 'Musca', true, 6, 'Black', 'https://loremflickr.com/400/300/housefly?lock=3'),
+('Cockroach', 'Periplaneta', false, 6, 'Brown', 'https://loremflickr.com/400/300/cockroach?lock=4'),
+('Grasshopper', 'Melanoplus', true, 6, 'Green', 'https://loremflickr.com/400/300/grasshopper?lock=5'),
+('Aphid', 'Aphis', false, 6, 'Green', 'https://loremflickr.com/400/300/aphid?lock=6'),
+('Beetle', 'Coleoptera', true, 6, 'Brown', 'https://loremflickr.com/400/300/beetle?lock=7'),
+('Stink Bug', 'Halyomorpha', true, 6, 'Brown', 'https://loremflickr.com/400/300/stinkbug?lock=8'),
+('Yellowjacket', 'Vespula', true, 6, 'Yellow/Black', 'https://loremflickr.com/400/300/yellowjacket?lock=9'),
+('Wasp', 'Polistes', true, 6, 'Yellow/Black', 'https://loremflickr.com/400/300/wasp?lock=10'),
+('Hornet', 'Vespa', true, 6, 'Brown/Yellow', 'https://loremflickr.com/400/300/hornet?lock=11'),
+('Butterfly', 'Danaus', true, 6, 'Orange/Black', 'https://loremflickr.com/400/300/butterfly?lock=12'),
+('Moth', 'Noctuidae', true, 6, 'Brown', 'https://loremflickr.com/400/300/moth?lock=13'),
+('Caterpillar', 'Lepidoptera', false, 6, 'Green', 'https://loremflickr.com/400/300/caterpillar?lock=14'),
+('Black Widow Spider', 'Latrodectus', false, 8, 'Black', 'https://loremflickr.com/400/300/blackwidow?lock=15'),
+('Wolf Spider', 'Lycosidae', false, 8, 'Brown', 'https://loremflickr.com/400/300/wolfspider?lock=16'),
+('Tick', 'Ixodes', false, 8, 'Brown', 'https://loremflickr.com/400/300/tick?lock=17'),
+('Earwig', 'Dermaptera', false, 6, 'Brown', 'https://loremflickr.com/400/300/earwig?lock=18'),
+('Dragonfly', 'Anisoptera', true, 6, 'Blue/Green', 'https://loremflickr.com/400/300/dragonfly?lock=19'),
+('Fire Ant', 'Solenopsis', false, 6, 'Red', 'https://loremflickr.com/400/300/fireant?lock=20');
 
 CREATE INDEX IF NOT EXISTS idx_bug_info_common_name ON public.bug_info (common_name);
 CREATE INDEX IF NOT EXISTS idx_bug_info_genus ON public.bug_info (genus);

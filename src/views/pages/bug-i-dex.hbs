@@ -1,35 +1,27 @@
- <div class="row">
+<link rel="stylesheet" href="/css/bug-i-dex.css">
 
-{{#unless bugs.length}}
-<div class = col-md-4>
-  <p id= "nobugserror" class = "p-3 mb-3"> no bugs have been submitted at this time</p>
-  </div>
-{{/unless}}
-
+<div class="container">
+  <h1 class="dex-title">Bug-i-dex</h1>
+  <div class="row">
     {{#each bugs}}
       <div class="col-md-4 mb-4">
-
-        <div class="card h-100 shadow-sm">
-
-          <div class="card-body">
-            <h5 class="card-title">{{common_name}}</h5>
-
-            <h6 class="card-subtitle mb-2 text-muted">
-              {{genus}}
-            </h6>
-
-            <p class="card-text">
-              <strong>Color:</strong> {{color}} <br>
-              <strong>Lat:</strong> {{latitude}} <br>
-              <strong>Lng:</strong> {{longitude}}
-            </p>
-
+        {{#if caught}}
+          <div class="card h-100 bug-card bug-card--caught">
+            <img src="{{image_url}}" alt="{{common_name}}" class="bug-image">
+            <div class="card-body">
+              <h5 class="card-title">#{{bug_id}} {{common_name}}</h5>
+              <p class="card-text text-muted"><em>{{genus}}</em></p>
+            </div>
           </div>
-
-        </div>
-
+        {{else}}
+          <div class="card h-100 bug-card bug-card--uncaught">
+            <div class="bug-image bug-image--placeholder">?</div>
+            <div class="card-body">
+              <h5 class="card-title">#{{bug_id}} ???</h5>
+            </div>
+          </div>
+        {{/if}}
       </div>
     {{/each}}
-
   </div>
 </div>

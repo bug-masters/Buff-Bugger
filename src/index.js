@@ -25,7 +25,7 @@ const pgp = require('pg-promise')();
 // setup image storage
 const multer = require("multer");
 const storage = multer.diskStorage({
-  destination: function(req, fule, cb){
+  destination: function(req, file, cb){
     cb(null, 'public/images/');
   },
   filename: function(req, file, cb){
@@ -38,7 +38,7 @@ const upload = multer({
   limits: {fileSize: maxSize},
   fileFilter: function(req, file, cb){
     const filetypes = /jpeg|jpg|png|webp/;
-    const mimetype = filetypess.test(file.mimetype);
+    const mimetype = filetypes.test(file.mimetype);
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     if(mimetype && extname){
       return cb(null, true);
@@ -155,7 +155,21 @@ app.get('/api/users', async (req, res) => {
 
 app.get('/bug-i-dex', async (req, res) => {
   try {
-    const bugs = await db.any('SELECT * FROM bug_info ORDER BY bug_id ASC');
+    const username = req.session.user ? req.session.user.username : '';
+    const bugs = await db.any(`
+      SELECT b.bug_id,
+             b.common_name,
+             b.genus,
+             b.color,
+             b.image_url,
+             EXISTS (
+               SELECT 1 FROM posts p
+               JOIN user_to_post utp ON utp.post_id = p.id
+               WHERE p.bug_id = b.bug_id AND utp.user_id = $1
+             ) AS caught
+      FROM bug_info b
+      ORDER BY b.bug_id ASC
+    `, [username]);
 
     res.render('pages/bug-i-dex', {
       title: 'bug-i-dex',
@@ -174,46 +188,35 @@ app.get('/bug-i-dex', async (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 
 //render submit page
-app.get('/submit',  isAuthenticated,(req, res) => {
-
+app.get('/submit', isAuthenticated, async (req, res) => {
   try {
-    res.render('pages/submit', { title: 'Submit'});
+    const bugs = await db.any('SELECT bug_id, common_name, genus FROM bug_info ORDER BY common_name ASC');
+    res.render('pages/submit', { title: 'Submit', bugs });
   } catch (error) {
-    console.error('you must register first', error);
-    res.redirect('/register')
+    console.error('Error loading species list:', error);
+    res.redirect('/home');
   }
 });
 
 // extract from page:
 app.post('/submit', upload, async (req, res) => {
   try {
-    const { common_name, genus, color, latitude, longitude, comments } = req.body;
+    const { bug_id, latitude, longitude, comments } = req.body;
 
-    // 1️ Insert into bug_info and return bug_id
-    const bug = await db.one(
-      `INSERT INTO bug_info (common_name, genus, color)
-       VALUES ($1, $2, $3)
-       RETURNING bug_id`,
-      [common_name, genus, color]
-    );
-
-    const bugId = bug.bug_id;
-
-    // 2 Insert into posts using POINT
-       const post = await db.one(
+    const post = await db.one(
       `INSERT INTO posts (coords, bug_id, comments)
-      VALUES (POINT($1, $2), $3, $4)
-      RETURNING id`,
-      [longitude, latitude, bugId, comments]// ⚠️ order matters: (x=lng, y=lat)
+       VALUES (POINT($1, $2), $3, $4)
+       RETURNING id`,
+      [longitude, latitude, bug_id, comments]
     );
 
     await db.none(
       `INSERT INTO user_to_post (user_id, post_id)
        VALUES ($1, $2)`,
-      [req.session.user.username, post.id] // username is correct for your schema
+      [req.session.user.username, post.id]
     );
 
-    res.redirect('/map');
+    res.redirect('/bug-i-dex');
 
   } catch (error) {
     console.error('Error inputting bug:', error);
