@@ -53,8 +53,8 @@
 
     <button type="submit" class="btn btn-primary" id="submitButton" style="background-color:green; border-color:green">Submit</button>
 
-    <input type="hidden" name="label_value" id="hiddenInputLatitude" required>
-    <input type="hidden" name="label_value" id="hiddenInputLongitude" required>
+    <input type="hidden" name="latitude" id="hiddenInputLatitude" required>
+    <input type="hidden" name="longitude" id="hiddenInputLongitude" required>
 </form>
 
 
@@ -76,16 +76,12 @@
   function success(position) {
     document.getElementById("submitButton").disabled = false;
     document.getElementById("geoCoordsLabel").innerHTML = ("Geo Coords: " + position.coords.latitude + "," + position.coords.longitude);
+    document.getElementById('hiddenInputLatitude').value = position.coords.latitude;
+    document.getElementById('hiddenInputLongitude').value = position.coords.longitude;
   }
 
   function error() {
     document.getElementById("submitButton").disabled = true;
     alert("Location data unacessable");
   }
-
-  document.getElementById("submitButton").addEventListener('submit', () => {
-
-    document.getElementById('hiddenInputLatitude').value = position.coords.latitude;
-    document.getElementById('hiddenInputLongitude').value = position.coords.longitude;
-  });
 </script>
