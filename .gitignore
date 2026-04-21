@@ -41,6 +41,10 @@ build/Release
 node_modules/
 jspm_packages/
 
+# Uploaded bug photos (keep the directory via .gitkeep, ignore the contents)
+public/images/*
+!public/images/.gitkeep
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 

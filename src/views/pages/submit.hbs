@@ -1,8 +1,16 @@
-<h2 class = "container mb-3">SUMBIT A BUG</h2>
+<h2 class = "container mb-3">SUBMIT A BUG</h2>
 
 <div class="container p-4">
-<form id="submit" action = "/submit" method = "POST">
+<form id="submit" action = "/submit" method = "POST" enctype="multipart/form-data">
 
+
+    <div class="mb-3">
+        <label for="bug_id" class="form-label"> Species </label>
+        <select class="form-control" id="bug_id" name="bug_id" required>
+            {{#each bugs}}
+                <option value="{{bug_id}}">{{common_name}} ({{genus}})</option>
+            {{/each}}
+        </select>
     <div class="mb-3"> 
         <label for="Common_Name" class="form-label"> Bug Common Name </label>
         <input
