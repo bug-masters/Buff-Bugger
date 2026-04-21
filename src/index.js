@@ -50,8 +50,8 @@ const upload = multer({
 
 // database configuration
 const dbConfig = {
-  host: 'db', // the database server
-  port: 5432, // the database port
+  host: process.env.DB_HOST, // the database server
+  port: process.env.PORT, // the database port
   database: process.env.POSTGRES_DB, // the database name
   user: process.env.POSTGRES_USER, // the user account to connect with
   password: process.env.POSTGRES_PASSWORD, // the password of the user account
@@ -182,8 +182,6 @@ app.get('/bug-i-dex', async (req, res) => {
     res.redirect('/home');
   }
 });
-//SUBMISSION
-
 
 //enable form parsing:
 app.use(express.urlencoded({ extended: true }));
@@ -253,6 +251,7 @@ app.post('/submit', upload, async (req, res) => {
   try {
     const { bug_id, latitude, longitude, comments } = req.body;
 
+    // 2 Insert into posts using POINT
     const post = await db.one(
       `INSERT INTO posts (coords, bug_id, comments)
        VALUES (POINT($1, $2), $3, $4)
