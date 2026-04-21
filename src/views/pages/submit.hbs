@@ -1,14 +1,5 @@
 <h2 class = "container mb-3">SUBMIT A BUG</h2>
 
-<!-- bug_id bigint NOT NULL,
-    common_name text NOT NULL,
-    genus text NOT NULL,
-    flying boolean DEFAULT false NOT NULL,
-    limb_count smallint DEFAULT 0 NOT NULL,
-    color text NOT NULL,
-    photo_id bigint DEFAULT 0 NOT NULL*/
--->
-
 <div class="container p-4">
 <form id="submit" action = "/submit" method = "POST" enctype="multipart/form-data">
 
@@ -20,57 +11,61 @@
                 <option value="{{bug_id}}">{{common_name}} ({{genus}})</option>
             {{/each}}
         </select>
-    </div>
-
-<button type="button" id="locationButton" class="btn btn-primary mb-3" style="background-color:green; border-color:green">
-  Share my location
-</button>
-   
-     <div class="mb-3"> 
-        <label for="latitude" class="form-label"> latitude </label>
+    <div class="mb-3"> 
+        <label for="Common_Name" class="form-label"> Bug Common Name </label>
         <input
          type="text" 
          class="form-control" 
-         id="latitude" 
-         aria-describedby="latitude" 
-         placeholder= "latitude" 
-         name="latitude" >
+         id="Bug Common Name" 
+         aria-describedby="Bug Common Name" 
+         placeholder= "Bug Common Name" 
+         name="common_name" required>
     </div>
 
-
-
-     <div class="mb-3"> 
-        <label for="longitude" class="form-label"> longitude </label>
+    <div class="mb-3"> 
+        <label for="genus" class="form-label"> genus </label>
         <input
          type="text" 
          class="form-control" 
-         id="longitude" 
-         aria-describedby="longitude" 
-         placeholder= "longitude" 
-         name="longitude" >
-    </div>
-{{!-- 
- Check if geolocation is supported by the browser --}}
-
-    <div class="mb-3">
-        <label for="bugImage" class="form-label"> Photo </label>
-        <input type="file" class="form-control" id="bugImage" name="bugImage" accept="image/*" />
+         id="Genus" 
+         aria-describedby="Genus" 
+         placeholder= "genus" 
+         name="genus" required>
     </div>
 
-    <button type="submit" class="btn btn-primary" style="background-color:green; border-color:green">Submit</button>
+     <div class="mb-3"> 
+        <label for="color" class="form-label"> color </label>
+        <input
+         type="text" 
+         class="form-control" 
+         id="Color" 
+         aria-describedby="Color" 
+         placeholder= "Color" 
+         name="color" required>
+    </div>
+
+    <div>
+      <label id="geoCoordsLabel" class="form-label"> Geo Coords: </label>
+    </div>
+    
+
+    <!-- <input type="image" name="image" accept="image" /> -->
+
+    <button type="submit" class="btn btn-primary" id="submitButton" style="background-color:green; border-color:green">Submit</button>
+
+    <input type="hidden" name="label_value" id="hiddenInputLatitude" required>
+    <input type="hidden" name="label_value" id="hiddenInputLongitude" required>
 </form>
 
 
 <div id= "demo"></div>
   </div>
 
-  <script>
+<script type="text/javascript">
+  window.onload = getLocation;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const x = document.getElementById("demo");
-  const locationButton = document.getElementById("locationButton");
-
-  function getLocation() {
+  function getLocation(){
+    document.getElementById("submitButton").disabled = true;
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(success, error);
     } else {
@@ -79,16 +74,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function success(position) {
-    document.getElementById("latitude").value = position.coords.latitude;
-    document.getElementById("longitude").value = position.coords.longitude;
+    document.getElementById("submitButton").disabled = false;
+    document.getElementById("geoCoordsLabel").innerHTML = ("Geo Coords: " + position.coords.latitude + "," + position.coords.longitude);
   }
 
   function error() {
-    alert("Sorry, no position available.");
+    document.getElementById("submitButton").disabled = true;
+    alert("Location data unacessable");
   }
 
-  locationButton.addEventListener("click", () => {
-    getLocation();
+  document.getElementById("submitButton").addEventListener('submit', () => {
+
+    document.getElementById('hiddenInputLatitude').value = position.coords.latitude;
+    document.getElementById('hiddenInputLongitude').value = position.coords.longitude;
   });
-});
 </script>

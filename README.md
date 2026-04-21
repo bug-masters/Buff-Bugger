@@ -1,3 +1,15 @@
+# Buff-Bugger
+
+> A location-based, gamified platform for discovering, documenting, and sharing bug finds in Boulder.
+
+## Why Buff-Bugger
+
+Existing biodiversity tools like iNaturalist and Seek are built for rigorous scientific data logging. They do that job well — but the experience is closer to filling out a form than going on an expedition. For a casual observer, that friction is where motivation dies.
+
+Buff-Bugger takes the same underlying activity — documenting what you find outside — and frames it as a game. Finds appear on a shared map, users build a collection over time, and a leaderboard rewards friendly competition within a local community. The project is deliberately hyper-local (Boulder only) rather than global, because the social loop of "who in my circle is finding more cool bugs than me" is the thing that makes people actually go outside and look. This sits in an underserved niche: citizen-science projects that use serious gamification to drive engagement. Most biodiversity apps treat gamification as a light decoration — Buff-Bugger treats it as the product.
+
+---
+
 # CSCI 3308 — Lab 8: Project Proposal
 
 **Spring 2026**
@@ -137,3 +149,107 @@ We plan to coordinate work and stay in sync through a hybrid of Discord and Text
 | 3 | Lack of bug species | Low | Increase range for map to cover |
 | 4 | Poor communication | Medium-High | Set serious consequences for those who don't pull their weight or ignore messages. The final consequence should be escalating to professor/TA. This has already been a problem for us thus far so we definitely need to work on it. |
 | 5 | Mapping location to image | Low | Manually putting location |
+
+---
+
+# Running the Application
+
+## Technology Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Handlebars, vanilla JavaScript, Google Maps JS API |
+| Application | Node.js, Express, express-session, bcryptjs, multer |
+| Data | PostgreSQL, pg-promise |
+| AI | OpenAI API |
+| Testing | Mocha, Chai, chai-http |
+| Infrastructure | Docker Compose, GitHub, Render |
+
+## Prerequisites
+
+- **Docker Desktop** (or Docker Engine + Docker Compose on Linux)
+- **Git** for cloning the repository
+- A modern browser (Chrome, Firefox, Safari, or Edge)
+- A **Google Maps JavaScript API key** (see Environment Variables below)
+- An **OpenAI API key** (required for the AI classification feature)
+
+No local Node.js or PostgreSQL installation is needed — everything runs in containers.
+
+## Running Locally
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/bug-masters/Buff-Bugger.git
+cd Buff-Bugger/ProjectSourceCode
+```
+
+**2. Create your environment file**
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and fill in the required variables listed below.
+
+**3. Start the containers**
+
+```bash
+docker compose up
+```
+
+On first run, this pulls the Postgres 14 and Node LTS images, installs dependencies, initializes the database from `src/init_data/create.sql` and `src/init_data/insert.sql`, and starts the Express server on port 3000.
+
+**4. Open the app**
+
+Visit **http://localhost:3000**.
+
+**5. Stop the containers**
+
+```bash
+docker compose down
+```
+
+To also remove the database volume (wiping all local data):
+
+```bash
+docker compose down -v
+```
+
+## Environment Variables
+
+All environment variables live in `ProjectSourceCode/.env`. Copy `.env.example` as a starting point. Never commit `.env` — it is gitignored.
+
+| Variable | Purpose |
+|----------|---------|
+| `POSTGRES_USER` | Database username |
+| `POSTGRES_PASSWORD` | Database password |
+| `POSTGRES_DB` | Database name |
+| `HOST` | DB host (`db` in Docker Compose, `localhost` standalone) |
+| `SESSION_SECRET` | Signing secret for `express-session` cookies |
+| `GOOGLE_MAPS_API_KEY` | Google Maps JavaScript API key |
+| `OPENAI_API_KEY` | OpenAI API key for the AI classification feature |
+
+## Running Tests
+
+```bash
+# With containers running:
+docker compose run web npm run test
+
+# Or run the full cycle (install, migrate, test, then start):
+docker compose run web npm run testandrun
+```
+
+The test suite covers:
+- `GET /welcome` — server reachability
+- `POST /register` — positive case (valid registration succeeds)
+- `POST /register` — negative case (invalid email rejected)
+- `GET /api/bugs` — returns the bug records used for map markers
+
+## Deployed Application
+
+The application is deployed on **Render** with a managed PostgreSQL instance.
+
+**Live URL:** `[ TEAM TO FILL — paste Render deployment URL here ]`
+
+On cold start, Render free-tier instances may take 30–60 seconds to wake. If the map appears empty on first load, give it a moment and refresh.
