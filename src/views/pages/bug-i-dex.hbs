@@ -25,3 +25,13 @@
     {{/each}}
   </div>
 </div>
+
+<div id="chatbot" class="chatbot">
+  <div class="chatbot__header">Ask about your bugs</div>
+  <div id="chatbot-messages" class="chatbot__messages"></div>
+  <form id="chatbot-form" class="chatbot__form">
+    <input id="chatbot-input" type="text" placeholder="Ask a question..." autocomplete="off" required>
+    <button type="submit">Send</button>
+  </form>
+</div>
+<script src="/js/bug-i-dex.js"></script>
