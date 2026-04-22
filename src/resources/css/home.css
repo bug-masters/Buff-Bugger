@@ -13,12 +13,12 @@
 
   .hero-wrapper {
     display: grid;
-    grid-template-columns: 260px 1fr;
+    grid-template-columns: 1fr;
     gap: 1.5rem;
     align-items: start;
   }
 
-  .friends-sidebar,
+
   .welcome-card,
   .map-card,
   .feature-card {
@@ -26,7 +26,7 @@
     border-radius: 16px;
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
   }
-
+/* 
   .friends-sidebar {
     padding: 1rem;
   }
@@ -50,7 +50,7 @@
 
   .friends-list li:last-child {
     border-bottom: none;
-  }
+  } */
 
   .main-panel {
     display: grid;
@@ -59,7 +59,7 @@
 
   .welcome-card {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
   }
 
   .welcome-card h1 {
@@ -69,7 +69,7 @@
   }
 
   .welcome-card p {
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto 1.25rem;
     line-height: 1.6;
     font-size: 1.05rem;

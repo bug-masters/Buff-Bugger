@@ -250,6 +250,6 @@ The test suite covers:
 
 The application is deployed on **Render** with a managed PostgreSQL instance.
 
-**Live URL:** `[ TEAM TO FILL — paste Render deployment URL here ]`
+**Live URL:** ` https://buff-bugger.onrender.com`
 
 On cold start, Render free-tier instances may take 30–60 seconds to wake. If the map appears empty on first load, give it a moment and refresh.
