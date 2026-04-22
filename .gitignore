@@ -142,4 +142,4 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-linit_db.sh
+init_db.sh
