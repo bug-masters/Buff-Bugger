@@ -507,9 +507,13 @@ app.get('/logout', (req, res) => {
     }
 
     // Render logout page with message
-    res.render('pages/logout', {
-      title: 'Logout',
-    });
+    // res.render('pages/logout', {
+    //   title: 'Logout',
+    // });
+
+    else {
+      res.redirect('/home');
+    }
   });
 });
 
