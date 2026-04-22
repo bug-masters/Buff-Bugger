@@ -202,7 +202,7 @@ On first run, this pulls the Postgres 14 and Node LTS images, installs dependenc
 
 **4. Open the app**
 
-Visit **http://localhost:3000**.
+Visit https://buff-bugger.onrender.com/ 
 
 **5. Stop the containers**
 
