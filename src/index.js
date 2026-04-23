@@ -1,3 +1,4 @@
+require('dotenv').config(); //for api key through env
 const express = require('express');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcryptjs'); //  To hash passwords
@@ -56,6 +57,9 @@ const dbConfig = {
   user: process.env.POSTGRES_USER, // the user account to connect with
   password: process.env.POSTGRES_PASSWORD, // the password of the user account
 };
+
+
+const mapsKey = process.env.GOOGLE_MAPS_API_KEY; //inject API key from. env
 
 const db = pgp(dbConfig);
 
