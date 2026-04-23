@@ -59,17 +59,6 @@ const dbConfig = {
 };
 
 
-app.get('/map', (req, res) => {
-  res.render('pages/map', { mapsKey: process.env.GOOGLE_MAPS_API_KEY });
-});
-
-app.get('/home', (req, res) => {
-  res.render('pages/home', { 
-    title: 'Home',
-    mapsKey: process.env.GOOGLE_MAPS_API_KEY  // add this
-  });
-});
-
 const db = pgp(dbConfig);
 
 // test your database
@@ -90,6 +79,16 @@ db.connect()
   saveUninitialized: false
 }));
 
+
+
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  res.locals.isLoggedIn = !!req.session.user;
+  res.locals.mapsKey = process.env.GOOGLE_MAPS_API_KEY; // just add this line
+  next();
+});
+
+
   function isAuthenticated(req, res, next) {
   if (req.session.user && req.session.user) {
     return next(); // user is logged in, proceed
@@ -107,6 +106,9 @@ app.get('/', async (req, res) => {
   res.status(200);
   res.redirect('/home');
 });
+
+
+
 
 //render home page
 app.get('/home', (req, res) => {
