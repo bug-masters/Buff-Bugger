@@ -59,7 +59,16 @@ const dbConfig = {
 };
 
 
-const mapsKey = process.env.GOOGLE_MAPS_API_KEY; //inject API key from. env
+app.get('/map', (req, res) => {
+  res.render('pages/map', { mapsKey: process.env.GOOGLE_MAPS_API_KEY });
+});
+
+app.get('/home', (req, res) => {
+  res.render('pages/home', { 
+    title: 'Home',
+    mapsKey: process.env.GOOGLE_MAPS_API_KEY  // add this
+  });
+});
 
 const db = pgp(dbConfig);
 
