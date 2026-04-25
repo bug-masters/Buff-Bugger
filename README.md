@@ -161,7 +161,7 @@ We plan to coordinate work and stay in sync through a hybrid of Discord and Text
 | Frontend | Handlebars, vanilla JavaScript, Google Maps JS API |
 | Application | Node.js, Express, express-session, bcryptjs, multer |
 | Data | PostgreSQL, pg-promise |
-| AI | OpenAI API |
+| AI | ANTHROPIC API |
 | Testing | Mocha, Chai, chai-http |
 | Infrastructure | Docker Compose, GitHub, Render |
 
@@ -171,7 +171,7 @@ We plan to coordinate work and stay in sync through a hybrid of Discord and Text
 - **Git** for cloning the repository
 - A modern browser (Chrome, Firefox, Safari, or Edge)
 - A **Google Maps JavaScript API key** (see Environment Variables below)
-- An **OpenAI API key** (required for the AI classification feature)
+- An **ANTHROPIC API key** (required for the AI classification feature)
 
 No local Node.js or PostgreSQL installation is needed — everything runs in containers.
 
