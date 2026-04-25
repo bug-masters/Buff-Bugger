@@ -310,7 +310,7 @@ app.post('/register', async(req, res) => {
     });
   }
   // password not strong enough
-  const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/;
   if (!req.body.password || !strongPasswordRegex.test(req.body.password)) {
     return res.status(400).render('pages/register', {
       title: 'Register', 
